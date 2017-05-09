@@ -1,0 +1,94 @@
+--This is my OS called M-OS.
+--It is pretty simple. But, it is fast, and easy to use!
+--I hope you enjoy my OS!
+ 
+--and yes i know there was 2 updates today
+ 
+w,h = term.getSize()
+slc = 0
+ 
+function menu()
+    term.setCursorPos(1,1)
+    paintutils.drawFilledBox(1,1,w, h, colors.white)
+    paintutils.drawLine(1,1,w, 1, colors.lightBlue)
+    term.setCursorPos(1,1)
+    term.setTextColor(colors.white)
+    term.setBackgroundColor(colors.lightBlue)
+    print(" M-OS Setup")
+end
+ 
+function welcomeScreen()
+    slc = 1
+    term.setTextColor(colors.gray)
+    term.setBackgroundColor(colors.white)
+    term.setCursorPos(8,3)
+    print("Welcome back to the M-OS installer.")
+   term.setCursorPos(8,4)
+    print('Lets finish your system setup!')
+    term.setCursorPos(8,5)
+    print('Click the "Next" button to continue.')
+    term.setCursorPos(36,14)
+    term.setBackgroundColor(colors.gray)
+    term.setTextColor(colors.lightGray)
+    print(" Next ")
+end
+ 
+ 
+function password()
+    slc = 2
+    term.setBackgroundColor(colors.black)
+    term.clear()
+    menu()
+    term.setTextColor(colors.gray)
+    term.setBackgroundColor(colors.white)
+    term.setCursorPos(8,3)
+    print("Lets setup a password.")
+    term.setCursorPos(1,8)
+    print("If you want to logon automaticly, dont enter anything.")
+    term.setCursorPos(1,10)
+    print("You can change your password later.")
+end
+
+function finish()
+    slc = 3
+    term.setBackgroundColor(colors.black)
+    term.clear()
+    menu()
+    term.setTextColor(colors.gray)
+    term.setBackgroundColor(colors.white)
+    term.setCursorPos(8,3)
+    print("Thank you for using M-OS.")
+    term.setCursorPos(8,4)
+    print("Click Reboot to reboot and start M-OS.")
+    term.setCursorPos(36,14)
+    term.setBackgroundColor(colors.gray)
+    term.setTextColor(colors.lightGray)
+    print(" Reboot ")
+end
+ 
+term.setBackgroundColor(colors.black)
+term.clear()
+ 
+menu()
+welcomeScreen()
+ 
+while true do
+    local event, button, X, Y = os.pullEvent()
+    if event == "mouse_click" then
+        if X>=36 and X<=41 and Y==14 and button ==1 and slc == 1 then
+            password()
+			term.setCursorPos(2,5)
+			term.setBackgroundColor(colors.white)
+			term.setTextColor(colors.gray)
+			term.setCursorBlink(true)
+			input = read()
+			local configfile2 = fs.open("m-os/config/pass", "w")
+			configfile2.write(input)
+			finish()
+		elseif X>=36 and X<=44 and Y==14 and slc == 3 then
+			fs.delete("boot")
+			fs.delete("setup2")
+            os.reboot()
+        end
+    end
+end

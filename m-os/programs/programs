@@ -1,0 +1,195 @@
+local function main()
+
+slc = 0
+
+local w,h = term.getSize()
+
+function printCentered(msg, height)
+term.setCursorPos(w/2 - #msg/2, height)
+term.write(msg)
+end
+
+function time()
+  local time = os.time()
+  local fTime = textutils.formatTime(time, false)
+  term.setCursorPos(w - 7, h)
+  term.setBackgroundColor(tBarC)
+  term.setTextColor(tBartC)
+  write(fTime)
+end
+
+function titleBar()
+  term.setCursorPos(1,h)
+  term.setBackgroundColor(tBarC)
+  term.setTextColor(tBartC)
+  term.clearLine()
+  term.setTextColor(tBartC)
+  term.setCursorPos(1, h)
+  write(" Menu ")
+end
+
+function loadPrograms()
+  --load shell icon
+  local shellicon = paintutils.loadImage("m-os/images/icons/shell")
+  paintutils.drawImage(shellicon, 2, 3)
+  term.setBackgroundColor(colors.black)
+  term.setTextColor(colors.yellow)
+  term.setCursorPos(2,3)
+  print("Shl")
+  term.setCursorPos(2,4)
+  print(">")
+  term.setCursorPos(1,6)
+  term.setBackgroundColor(colors.white)
+  term.setTextColor(colors.gray)
+  print("Shell")
+  --load file browser icon
+  local fileicon = paintutils.loadImage("m-os/images/icons/file")
+  paintutils.drawImage(fileicon, 7, 3)
+  term.setCursorPos(7,5)
+  term.setTextColor(colors.white)
+  print("FILE")
+  term.setCursorPos(7,6)
+  term.setBackgroundColor(colors.white)
+  term.setTextColor(colors.gray)
+  print("File")
+  --load paint icon
+  local painticon = paintutils.loadImage("m-os/images/icons/paint")
+  paintutils.drawImage(painticon, 13,3)
+  term.setCursorPos(12,6)
+  term.setBackgroundColor(colors.white)
+  term.setTextColor(colors.gray)
+  print("Paint")
+end
+
+function installedPrograms()
+  term.setBackgroundColor(colors.white)
+  term.setTextColor(colors.gray)
+  term.setCursorPos(2,8)
+  print("Installed Programs")
+  term.setCursorPos(2,10)
+  if not fs.exists("m-os/programs/installedPrograms") then
+	print("You have no programs yet!")
+	term.setCursorPos(2,12)
+	term.setBackgroundColor(colors.gray)
+	term.setTextColor(colors.lightGray)
+	print(" Get some now! ")
+  else
+  	term.setCursorPos(2,10)
+	term.setBackgroundColor(colors.gray)
+	term.setTextColor(colors.lightGray)
+	print(" View your Programs ")
+  end
+end
+
+function drawWindow()
+  local tbarC = colors.lightBlue
+  local tBartC = colors.white
+  term.setBackgroundColor(colors.white)
+  term.clear()
+  term.setCursorPos(1,1)
+  term.setBackgroundColor(tbarC)
+  term.setTextColor(tBartC)
+  term.clearLine()
+  term.setCursorPos(2,1)
+  write("Programs")
+  term.setCursorPos(w,1)
+  term.setBackgroundColor(colors.red)
+  print("X")
+  loadPrograms()
+  term.setBackgroundColor(colors.white)
+  term.setTextColor(colors.gray)
+end
+
+function args()
+  slc = 1
+  drawWindow()
+  local y1 = h/2-3
+  local y2 = h/2+6
+  paintutils.drawBox(w/2-10,h/2-3,w/2+10,h/2+4,colors.lightGray)
+  paintutils.drawFilledBox(w/2-9,h/2-2,w/2+9,h/2+3,colors.white)
+  paintutils.drawLine(w/2-10,h/2-3,w/2+10,h/2-3,colors.lightBlue)
+  term.setTextColor(colors.white)
+  term.setCursorPos(w/2-10, h/2-3)
+  print("Open File")
+  term.setTextColor(colors.gray)
+  term.setCursorPos(w/2-9, h/2-2)
+  term.setBackgroundColor(colors.white)
+  print("Enter a image path.")
+  term.setBackgroundColor(colors.gray)
+  printCentered("                 ",h/2-1)
+  term.setBackgroundColor(colors.white)
+  term.setCursorPos(w/2-9,h/2)
+  print("Press enter 2 times")
+  term.setCursorPos(w/2-9,h/2+1)
+  print("to open.")
+  term.setCursorPos(w/2-9,h/2+2)
+  print("Press Q 2 times to")
+  term.setCursorPos(w/2-9,h/2+3)
+  print("close")
+end
+
+drawWindow()
+titleBar()
+installedPrograms()
+
+while true do
+drawWindow()
+titleBar()
+installedPrograms()
+local event, button, X, Y = os.pullEvent()
+    if event == "mouse_click" then
+      if X == w and Y==1 and button ==1 then
+        term.clear()
+        shell.run("m-os/desktop")
+     elseif X>=1 and X<=5 and Y==6 and button == 1 then
+        term.setBackgroundColor(colors.black)
+        term.setTextColor(colors.yellow)
+        term.setCursorPos(1,1)
+        term.clear()
+        print("To go back to M-OS, type 'exit'.")
+        shell.run("m-os/programs/mshell")
+    elseif X>=7 and X<=11 and Y==6 and button == 1 then
+        term.clear()
+        shell.run("m-os/programs/file_browser")
+    elseif X>=12 and X<=17 and Y==6 and button == 1 then
+        args()
+        titleBar()
+        term.setCursorPos(w/2-8,h/2-1)
+        term.setBackgroundColor(colors.gray)
+        term.setTextColor(colors.white)
+        term.setCursorBlink(true)
+        input = read()
+		shell.run("paint","pictures/"..input)
+	elseif X>2 and X<=20 and Y==10 and button == 1 then
+		shell.run("m-os/programs/installed_programs")
+      end
+    end
+end
+
+while true do
+local event, key = os.pullEvent("key")
+	if key == keys.enter and slc == 1 then
+		shell.run("paint","pictures/"..input)
+    end
+end
+end
+
+local ok, err = pcall(main)
+if not ok then
+	term.setBackgroundColor(colors.red)
+	term.clear()
+	term.setBackgroundColor(colors.gray)
+	term.setCursorPos(1,1)
+	term.clearLine()
+	term.setTextColor(colors.white)
+	print("Internal System Error")
+	term.setBackgroundColor(colors.red)
+	print("The following error has occured: " .. err)
+	print(" ")
+	print("Please report this error to MarcoPolo0306. (=")
+	print(" ")
+	print("(Your computer will restart in 30 seconds.")
+	sleep(31)
+	os.reboot()
+end
+

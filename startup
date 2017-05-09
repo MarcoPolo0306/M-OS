@@ -1,0 +1,145 @@
+local w,h = term.getSize()
+local selection = 1
+
+function printCentered(msg, height)
+term.setCursorPos(w/2 - #msg/2, height)
+term.write(msg)
+end
+function printWrappedRight(msg, height)
+term.setCursorPos(w - #msg, height)
+term.write(msg)
+end
+
+function drawMenuS1()
+term.setBackgroundColor(colors.black)
+term.clear()
+term.setCursorPos(1,1)
+print("Use arrow keys to navagate. Press enter to confirm.")
+printCentered("Start M-OS",4)
+term.setBackgroundColor(colors.gray)
+printCentered(" > Run M-OS < ",7)
+term.setBackgroundColor(colors.black)
+printCentered(" Restore older version ",8)
+term.setBackgroundColor(colors.black)
+printCentered(" ",9)
+printCentered(" Run CraftOS ",10)
+term.setBackgroundColor(colors.black)
+printCentered(" ",11)
+printCentered(" Shutdown ",12)
+end
+
+function drawMenuS2()
+term.setBackgroundColor(colors.black)
+term.clear()
+term.setCursorPos(1,1)
+print("Use arrow keys to navagate. Press enter to confirm.")
+printCentered("Restore a older version of M-OS",4)
+term.setBackgroundColor(colors.black)
+printCentered(" Run M-OS ",7)
+term.setBackgroundColor(colors.gray)
+printCentered(" > Restore older version < ",8)
+term.setBackgroundColor(colors.black)
+printCentered(" ",9)
+term.setBackgroundColor(colors.black)
+printCentered(" Run CraftOS ",10)
+term.setBackgroundColor(colors.black)
+printCentered(" ",11)
+printCentered(" Shutdown ",12)
+end
+
+function drawMenuS3()
+term.setBackgroundColor(colors.black)
+term.clear()
+term.setCursorPos(1,1)
+print("Use arrow keys to navagate. Press enter to confirm.")
+printCentered("Open options",4)
+term.setBackgroundColor(colors.black)
+printCentered(" Run M-OS ",7)
+term.setBackgroundColor(colors.black)
+term.setBackgroundColor(colors.black)
+printCentered(" Restore older version ",8)
+term.setBackgroundColor(colors.black)
+printCentered("",9)
+term.setBackgroundColor(colors.gray)
+printCentered(" > Run CraftOS < ",10)
+term.setBackgroundColor(colors.black)
+printCentered("",11)
+printCentered(" Shutdown ",12)
+end
+
+function drawMenuS4()
+term.setBackgroundColor(colors.black)
+term.clear()
+term.setCursorPos(1,1)
+print("Use arrow keys to navagate. Press enter to confirm.")
+printCentered("Shutdown your computer",4)
+term.setBackgroundColor(colors.black)
+printCentered(" Run M-OS ",7)
+term.setBackgroundColor(colors.black)
+term.setBackgroundColor(colors.black)
+printCentered(" Restore older version ",8)
+term.setBackgroundColor(colors.black)
+printCentered("",9)
+printCentered(" Run CraftOS ",10)
+printCentered("",11)
+term.setBackgroundColor(colors.gray)
+printCentered(" > Shutdown < ",12)
+end
+
+local configfile1 = io.open("m-os/config/showBiosOnStartup", "r")
+config1 = configfile1:read()
+if config1 == "false" then
+	shell.run("m-os/boot")
+	configfile1:close()
+else
+	configfile1:close()
+end
+
+drawMenuS1()
+
+while true do
+	local event, key = os.pullEvent("key")
+	
+	if key == keys.up then
+
+        if selection == 2 then
+            selection = 1
+	        drawMenuS1()
+        elseif selection == 3 then
+            selection = 2
+            drawMenuS2()
+        elseif selection == 4 then
+          selection = 3
+          drawMenuS3()
+        end
+	elseif key == keys.down then
+        if selection == 1 then
+            selection = 2
+	        drawMenuS2()
+        elseif selection == 2 then
+            selection = 3
+            drawMenuS3()
+        elseif selection == 3 then
+            selection = 4
+            drawMenuS4()
+        end
+        
+    elseif key == keys.enter then
+        if selection == 1 then
+            if peripheral.find("monitor") then
+                shell.run("m-os/monitior_detected")
+            else
+                shell.run("m-os/boot")
+            end
+        elseif selection == 2 then
+			shell.run("m-os/restore")
+        elseif selection == 3 then
+            term.setBackgroundColor(colors.black)
+            term.clear()
+            term.setCursorPos(1,1)
+            shell.run("shell")
+        elseif selection == 4 then
+            os.shutdown()
+        end
+    end
+end

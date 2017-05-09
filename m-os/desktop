@@ -1,0 +1,170 @@
+local function main()
+
+local w,h = term.getSize()
+
+slc = 0
+tBarC = 8
+tBartC = colors.white
+backColor = 1
+isBuild = false
+term.setBackgroundColor(backColor)
+term.clear()
+
+function time()
+  local time = os.time()
+  local fTime = textutils.formatTime(time, false)
+  term.setCursorPos(w - 7, h)
+  term.setBackgroundColor(tBarC)
+  term.setTextColor(tBartC)
+  write(fTime)
+end
+
+function titleBar()
+  term.setCursorPos(1,h)
+  term.setBackgroundColor(tBarC)
+  term.setTextColor(tBartC)
+  term.clearLine()
+  term.setTextColor(tBartC)
+  term.setCursorPos(1, h)
+  write(" Menu ")
+  term.setCursorPos(w - 5, h)
+end
+
+function titleBarMenuClick()
+  term.setCursorPos(1,h)
+  term.setBackgroundColor(tBarC)
+  term.setTextColor(tBartC)
+  term.clearLine()
+  term.setBackgroundColor(colors.gray)
+  term.setTextColor(colors.lightGray)
+  term.setCursorPos(1, h)
+  
+  write(" Menu ")
+end
+
+function drawDesktop()
+  term.setBackgroundColor(backColor)
+  term.clear()
+  imagePath = io.open("m-os/config/bgPath", "r")
+  local imagePath2 = imagePath:read()
+  bground = paintutils.loadImage(imagePath2)
+  paintutils.drawImage(bground,w/2-48/2,h/2-17/2)
+  titleBar()
+  if isBuild == true then
+    term.setBackgroundColor(colors.white)
+    term.setTextColor(colors.lightGray)
+    term.setCursorPos(w-27,h-2)
+    print("M-OS 1.1.4 Deveolper Preview")
+    term.setCursorPos(w-27,h-1)
+    print("build-7, build date: 4/30/17") 
+  end
+end
+ 
+function drawMenu1()
+  term.setTextColor(tBartC)
+  term.setBackgroundColor(tBarC)
+  term.setCursorPos(1,h - 12)
+  print("           ")
+  term.setCursorPos(1,h - 11)
+  print("Test Crash ")
+  term.setCursorPos(1,h - 10)
+  print("           ")
+  term.setCursorPos(1,h - 9)
+  print("   News    ")
+  term.setCursorPos(1,h - 8)
+  print(" Settings  ")
+  term.setCursorPos(1,h - 7)
+  print(" Programs  ")
+  term.setCursorPos(1,h - 6)
+  print("           ")
+  term.setCursorPos(1,h - 5)
+  print("  Logoff   ")
+  term.setCursorPos(1,h - 4)
+  print("           ")
+  term.setCursorPos(1, h - 3)
+  print(" Shutdown  ")
+  term.setCursorPos(1, h - 2)
+  print("  Restart  ")
+  term.setCursorPos(1, h - 1)
+  print("           ")
+end
+
+drawDesktop()
+
+while true do
+  if not fs.exists("m-os/desktop") then
+    slc = 2147483647
+	sleep(5)  
+	term.setBackgroundColor(colors.red)
+	term.clear()
+	term.setBackgroundColor(colors.gray)
+	term.setCursorPos(1,1)
+	term.clearLine()
+	term.setTextColor(colors.white)
+	print("Could not find file.")
+	term.setBackgroundColor(colors.red)
+	print("M-OS could not find the file: M-OS")
+	print("Please run a reinstall when your computer reboots.")
+	sleep(15)
+	os.reboot()
+  end
+  local event, button, X, Y = os.pullEvent()
+  if event == "mouse_click" then
+    if X >=2 and X <=6 and Y==h and button ==1 and slc == 0 then
+     drawMenu1()
+     titleBarMenuClick()
+     slc = 1
+     sleep(0.2)
+     canClick = true
+   elseif X>=1 and X<=6 and Y==h and button == 1 and slc == 1 and canClick == true then
+     drawDesktop()
+     slc = 0
+   elseif X>=1 and X<=11 and Y==h - 9 and slc == 1 and button == 1 then
+     shell.run("m-os/programs/news")
+   elseif X>=1 and X<=11 and Y==h - 7 and slc == 1 and button == 1 then
+     shell.run("m-os/programs/programs")
+   elseif X>=1 and X<=11 and Y==h-8 and slc == 1 and button == 1 then
+     shell.run("m-os/settings")
+   elseif X>=1 and X<=11 and Y==h-5 and slc == 1 and button == 1 then
+     shell.run("m-os/logon")
+   elseif X>=1 and X<=11 and Y==h - 2 and slc == 1 and button == 1 then
+     os.reboot()
+   elseif X>=1 and X<=11 and Y==h - 3 and slc == 1 and button == 1 then
+     os.shutdown()
+   elseif X>=1 and X<=11 and Y==h-11 and slc ==1 and button == 1 then
+	error("M-OS has crahed because you wanted it to.")
+   else
+	drawDesktop()
+   end
+  end
+end
+end
+
+local ok, err = pcall(main)
+if not ok then
+	sleep(1)
+	term.setBackgroundColor(colors.black)
+	slc = 2147483647
+	sleep(0.3)
+	term.clear()
+	sleep(0.4)
+	term.setBackgroundColor(colors.red)
+	term.clear()
+	term.setBackgroundColor(colors.gray)
+	term.setCursorPos(1,1)
+	term.clearLine()
+	term.setTextColor(colors.white)
+	print("Internal System Error")
+	term.setBackgroundColor(colors.red)
+	print("The following error has occured: " .. err)
+	print("")
+	print("Please report this error to MarcoPolo0306. (=")
+	print("")
+	print("(Your computer will restart in 30 seconds.)")
+	sleep(31)
+	os.reboot()
+end
+
+
+
+

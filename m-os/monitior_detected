@@ -1,0 +1,77 @@
+term.setCursorPos(1,1)
+term.setBackgroundColor(colors.black)
+term.setTextColor(colors.white)
+term.clear()
+
+local w,h = term.getSize()
+
+function printCentered(msg, height)
+  term.setCursorPos(w/2 - #msg/2, height)
+  term.write(msg)
+end
+
+function drawMenu1()
+  term.setBackgroundColor(colors.black)
+  term.clear()
+  printCentered("A monitor was detected!",1)
+  printCentered("Would you like to enable this monitor?",2)
+  term.setBackgroundColor(colors.gray)
+  printCentered(" > Yes < ",5)
+  term.setBackgroundColor(colors.black)
+  printCentered(" No ",6)
+end
+
+function drawMenu2()
+  term.setBackgroundColor(colors.black)
+  term.clear()
+  printCentered("A monitor was detected!",1)
+  printCentered("Would you like to enable this monitor?",2)
+  term.setBackgroundColor(colors.black)
+  printCentered(" Yes ",5)
+  term.setBackgroundColor(colors.gray)
+  printCentered(" > No < ",6)
+end
+
+drawMenu1()
+
+selection = 1
+
+while true do
+	local event, key = os.pullEvent("key")
+	
+	if key == keys.up then
+        if selection == 2 then
+            selection = 1
+	        drawMenu1()
+        end
+	elseif key == keys.down then
+        if selection == 1 then
+            selection = 2
+	        drawMenu2()
+        end
+        
+    elseif key == keys.enter then
+        if selection == 1 then
+           if peripheral.wrap("right") then
+                term.clear()
+                printCentered("M-OS is being run on a monitior.",h/2 -1)
+                printCentered("To stop, reboot your computer.",h/2)
+                term.setCursorPos(1,h)
+                shell.run("monitor","right","m-os/boot")
+           elseif peripheral.wrap("left") then
+                term.clear()
+                printCentered("M-OS is being run on a monitior.",h/2 -1)
+                printCentered("To stop, reboot your computer.",h/2)
+                term.setCursorPos(1,h)
+                shell.run("monitor","left","m-os/boot")
+           else
+                term.clear()
+                printCentered("Error: Monitor connection lost.",8)
+           end
+        elseif selection == 2 then
+            term.clear()
+            shell.run("m-os/boot")
+        end
+    end
+end
+

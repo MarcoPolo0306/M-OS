@@ -1,0 +1,72 @@
+local w,h = term.getSize()
+local selection = 1
+
+function printCentered(msg, height)
+	term.setCursorPos(w/2 - #msg/2, height)
+	term.write(msg)
+end
+
+term.clear()
+
+if not fs.exists(".m-os_BACKUP") then
+	printCentered("Error: No backup file found.",h/2-2)
+	sleep(2)
+	os.reboot()
+end
+
+function drawMenuS1()
+	term.setBackgroundColor(colors.black)
+	term.clear()
+	printCentered("Are you sure you want to restore to your files?",1)
+	printCentered("All of your current files will be lost.",2)
+	term.setBackgroundColor(colors.gray)
+	printCentered(" > Yes < ",4)
+	term.setBackgroundColor(colors.black)
+	printCentered(" No ",5)
+end
+
+function drawMenuS2()
+	term.setBackgroundColor(colors.black)
+	term.clear()
+	printCentered("Are you sure you want to restore to your files?",1)
+	printCentered("All of your current files will be lost.",2)
+	term.setBackgroundColor(colors.black)
+	printCentered(" Yes ",4)
+	term.setBackgroundColor(colors.gray)
+	printCentered(" > No < ",5)
+end
+
+drawMenuS1()
+
+while true do
+	local event, key = os.pullEvent("key")
+	
+	if key == keys.up then
+
+        if selection == 2 then
+            selection = 1
+	        drawMenuS1()
+		end
+	elseif key == keys.down then
+        if selection == 1 then
+            selection = 2
+	        drawMenuS2()
+		end
+    elseif key == keys.enter then
+        if selection == 1 then
+            term.clear()
+			term.setCursorPos(1,1)
+			print("Restoring older version...")
+			fs.delete("m-os")
+			fs.copy(".m-os_BACKUP","m-os")
+			fs.delete(".m-os_BACKUP")
+			print("Finished restoring files.")
+			sleep(1)
+			print("Rebooting...")
+			sleep(0.5)
+			os.reboot()
+        elseif selection == 2 then
+			os.reboot()
+		end
+	end
+end

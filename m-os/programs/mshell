@@ -1,0 +1,69 @@
+term.clear()
+term.setTextColor(colors.white)
+term.setCursorPos(1,1)
+print("M-Shell v1.0")
+print("By MarcoPolo0306")
+print("Type 'cmds' for all of the commands.")
+term.setCursorBlink(true)
+write("$> ")
+while true do
+	input = read()
+	if input == "cmds" then
+		print("Commands:")
+		sleep(0.1)
+		print("exit - Exit the shell")
+		sleep(0.1)
+		print("about - Open the about menu")
+		sleep(0.1)
+		print("shutdown - Shutdowns the computer")
+		sleep(0.1)
+		print("reboot - Reboots the computer")
+		sleep(0.1)
+		print("clear - Clears the screen")
+		if fs.exists("m-os") then
+			sleep(0.1)
+			print("mos - Run M-OS")
+		end
+	elseif input == "mos" and fs.exists("m-os") then
+		shell.run("m-os/boot")
+	elseif input == "clear" then
+		term.clear()
+		term.setCursorPos(1,1)
+	elseif input == "exit" then
+		term.clear()
+		term.setCursorPos(1,1)
+		break
+	elseif input == "about" then
+		print("About M-Shell")
+		print("Created by MarcoPolo0306")
+		print("(C) MarcoSoft 2016, 2017")
+		print("Version 1.0_r1")
+		print("Type 'cmds' to show all of the commands.")
+		print("Type 'marcosoft' to show everything made my Marcosoft.")
+	elseif input == "marcosoft" then
+		print("MARCOSOFT")
+		textutils.slowPrint("-------------------",10)
+		print("OS`s:")
+		write("M-OS -")
+		if term.isColor() then
+			term.setTextColor(colors.green)
+			write(" M-Shell")
+		else
+			write(" M-Shell")
+		end
+		print(" ")
+		term.setTextColor(colors.white)
+		print("Programs:")
+	elseif input == "shutdown" then
+		print("Shutting down...")
+		sleep(0.89278217)
+		os.shutdown()
+	elseif input == "reboot" then
+		print("Rebooting...")
+		sleep(0.89278217)
+		os.reboot()
+	else
+		shell.run(input)
+	end
+	write("$> ")
+end

@@ -1,0 +1,478 @@
+w,h = term.getSize()
+slc = 0
+isBuild = false
+lastSelection = 1
+local showBIOSonStartup = false
+local updateOnStartup = false
+local configfile1 = io.open("m-os/config/showBiosOnStartup", "r")
+config1 = configfile1:read()
+if config1 == "false" then
+	showBIOSonStartup = false
+else
+	showBIOSonStartup = true
+end
+
+local configfile2 = io.open("m-os/config/updateOnStartup", "r")
+config2 = configfile2:read()
+if config2 == "false" then
+	updateOnStartup = false
+else
+	updateOnStartup = true
+end
+
+imagePath = io.open("m-os/config/bgPath", "r")
+local imagePath2 = imagePath:read()
+
+function printCentered(msg, height)
+	term.setCursorPos(w/2 - #msg/2, height)
+	term.write(msg)
+end
+
+function titleBar()
+  term.setCursorPos(1,h)
+  term.setBackgroundColor(colors.lightBlue)
+  term.setTextColor(colors.white)
+  term.clearLine()
+  term.setTextColor(colors.white)
+  term.setCursorPos(1, h)
+  write(" Menu ")
+end
+
+function leftNavMenu1()
+  term.setCursorPos(1,2)
+  term.setBackgroundColor(colors.gray)
+  print(" Storage ")
+  term.setTextColor(colors.gray)
+  term.setBackgroundColor(colors.white)
+  print("Customize")
+  print("  M-OS   ")
+  print(" Startup ")
+  paintutils.drawLine(10,2,10,h-1,colors.lightGray)
+end
+
+function leftNavMenu2()
+  term.setCursorPos(1,2)
+  term.setTextColor(colors.gray)
+  term.setBackgroundColor(colors.white)
+  print(" Storage ")
+  term.setTextColor(colors.white)
+  term.setBackgroundColor(colors.gray)
+  print("Customize")
+  term.setTextColor(colors.gray)
+  term.setBackgroundColor(colors.white)
+  print("  M-OS   ")
+  print(" Startup ")
+  paintutils.drawLine(10,2,10,h-1,colors.lightGray)
+end
+
+function leftNavMenu3()
+  term.setCursorPos(1,2)
+  term.setTextColor(colors.gray)
+  term.setBackgroundColor(colors.white)
+  print(" Storage ")
+  print("Customize")
+  term.setTextColor(colors.white)
+  term.setBackgroundColor(colors.gray)
+  print("  M-OS   ")
+  term.setTextColor(colors.gray)
+  term.setBackgroundColor(colors.white)
+  print(" Startup ")
+  paintutils.drawLine(10,2,10,h-1,colors.lightGray)
+end
+
+function leftNavMenu4()
+  term.setCursorPos(1,2)
+  term.setTextColor(colors.gray)
+  term.setBackgroundColor(colors.white)
+  print(" Storage ")
+  print("Customize")
+  print("  M-OS   ")
+  term.setTextColor(colors.white)
+  term.setBackgroundColor(colors.gray)
+  print(" Startup ")
+  paintutils.drawLine(10,2,10,h-1,colors.lightGray)
+end
+
+function selection1()
+    slc = 1
+    lastSelection = 1
+    term.setTextColor(colors.gray)
+    term.setBackgroundColor(colors.white)
+    term.setCursorPos(12,2)
+    print("Manage Storage")
+    term.setCursorPos(12,4)
+    local freeSpace = fs.getFreeSpace("/")
+    print("Free space: " .. freeSpace .. " bytes.")
+	term.setCursorPos(12,6)
+	term.setTextColor(colors.lightGray)
+    term.setBackgroundColor(colors.gray)
+	print(" Delete all Programs ")
+end
+
+function selection2()
+	menuClcik = true
+    slc = 2
+    lastSelection = 2
+    term.setTextColor(colors.gray)
+    term.setBackgroundColor(colors.white)
+    term.setCursorPos(12,2)
+    print("Customize your Computer")
+    term.setCursorPos(12,4)
+    term.setTextColor(colors.lightGray)
+    term.setBackgroundColor(colors.gray)
+    print(" Change Background ")
+end
+
+function selection3()
+    slc = 3
+    lastSelection = 3
+    term.setTextColor(colors.gray)
+    term.setBackgroundColor(colors.white)
+    term.setCursorPos(12,2)
+    print("M-OS")
+    term.setCursorPos(12,3)
+    print("Created by MarcoPolo0306")
+    if isBuild == true then
+      term.setCursorPos(12,5)
+      print("Build date: 5/29/17")
+      term.setCursorPos(12,6)
+      print("Build version: 6")
+    else
+      term.setCursorPos(12,5)
+      print("Version realease date: 5/8/17")
+      term.setCursorPos(12,6)
+      print("Version: 1.1.8")
+      term.setCursorPos(25,6)
+    end
+    term.setCursorPos(12,8)
+    term.setBackgroundColor(colors.gray)
+    term.setTextColor(colors.lightGray)
+    print(" Reinstall ")
+    term.setCursorPos(12,10)
+    term.setBackgroundColor(colors.gray)
+    term.setTextColor(colors.lightGray)
+    print(" Uninstall ")
+end
+
+function selection4()
+    slc = 4
+    lastSelection = 4
+    term.setTextColor(colors.gray)
+    term.setBackgroundColor(colors.white)
+    term.setCursorPos(12,2)
+    print("Startup Options")
+    term.setBackgroundColor(colors.gray)
+    term.setTextColor(colors.lightGray)
+    term.setCursorPos(12,4)
+    print(" Change Password ")
+    term.setCursorPos(12,6)
+    term.setTextColor(colors.gray)
+    term.setBackgroundColor(colors.white)
+    print("Show BIOS on startup: ")
+    term.setTextColor(colors.white)
+	term.setCursorPos(35,6)
+	if showBIOSonStartup == false then
+	    term.setBackgroundColor(colors.red)
+		write(" No ")
+	else
+	    term.setBackgroundColor(colors.lime)
+		write(" Yes ")
+	end
+    term.setCursorPos(12,8)
+    term.setTextColor(colors.gray)
+    term.setBackgroundColor(colors.white)
+    print("Update on startup: ")
+    term.setTextColor(colors.white)
+	term.setCursorPos(35,8)
+	if updateOnStartup == false then
+	    term.setBackgroundColor(colors.red)
+		write(" No ")
+	else
+	    term.setBackgroundColor(colors.lime)
+		write(" Yes ")
+	end
+end
+
+function drawWindow()
+  local tbarC = colors.lightBlue
+  local tBartC = colors.white
+  term.setBackgroundColor(colors.white)
+  term.clear()
+  term.setCursorPos(1,1)
+  term.setBackgroundColor(tbarC)
+  term.setTextColor(tBartC)
+  term.clearLine()
+  term.setCursorPos(2,1)
+  write("Settings")
+  term.setCursorPos(w,1)
+  term.setBackgroundColor(colors.red)
+  print("X")
+  term.setBackgroundColor(colors.white)
+  term.setTextColor(colors.gray)
+end
+
+function areYouSure()
+  slc = 1
+  local y1 = h/2-3
+  local y2 = h/2+6
+  paintutils.drawBox(w/2-10,h/2-3,w/2+10,h/2+4,colors.lightGray)
+  paintutils.drawFilledBox(w/2-9,h/2-2,w/2+9,h/2+3,colors.white)
+  paintutils.drawLine(w/2-10,h/2-3,w/2+10,h/2-3,colors.lightBlue)
+  term.setTextColor(colors.white)
+  term.setCursorPos(w/2-10, h/2-3)
+  print("Are you sure?")
+  term.setTextColor(colors.gray)
+  term.setCursorPos(w/2-9, h/2-2)
+  term.setBackgroundColor(colors.white)
+  print(" Are you sure you")
+  term.setCursorPos(w/2-9, h/2-1)
+  print(" want to delete ")
+  term.setCursorPos(w/2-9, h/2)
+  print(" M-OS?")
+  term.setCursorPos(w/2-6, h/2+2)
+  term.setTextColor(colors.lightGray)
+  term.setBackgroundColor(colors.gray)
+  print(" Yes ")
+  term.setCursorPos(w/2+3, h/2+2)
+  print(" No ")
+end
+
+function args()
+  slc = 10
+  term.clear()
+  drawWindow()
+  leftNavMenu4()
+  titleBar()
+  local y1 = h/2-3
+  local y2 = h/2+6
+  paintutils.drawBox(w/2-10,h/2-3,w/2+10,h/2+3,colors.lightGray)
+  paintutils.drawFilledBox(w/2-9,h/2-2,w/2+9,h/2+2,colors.white)
+  paintutils.drawLine(w/2-10,h/2-3,w/2+10,h/2-3,colors.lightBlue)
+  term.setTextColor(colors.white)
+  term.setCursorPos(w/2-10, h/2-3)
+  print("Change password")
+  term.setTextColor(colors.gray)
+  term.setCursorPos(w/2-9, h/2-2)
+  term.setBackgroundColor(colors.white)
+  print("Enter a image path.")
+  term.setBackgroundColor(colors.gray)
+  printCentered("                 ",h/2-1)
+  term.setBackgroundColor(colors.white)
+  term.setCursorPos(w/2-9,h/2)
+  print("Enter nothing and")
+  term.setCursorPos(w/2-9,h/2+1)
+  print("the logon screen")
+  term.setCursorPos(w/2-9,h/2+2)
+  print("will not appear.")
+end
+
+function dialogBox(title, msg)
+  slc = 10
+  term.clear()
+  drawWindow()
+  leftNavMenu4()
+  titleBar()
+  local y1 = h/2-3
+  local y2 = h/2+6
+  paintutils.drawBox(w/2-10,h/2-3,w/2+10,h/2+3,colors.lightGray)
+  paintutils.drawFilledBox(w/2-9,h/2,w/2+9,h/2,colors.white)
+  paintutils.drawLine(w/2-10,h/2-3,w/2+10,h/2-3,colors.lightBlue)
+  term.setTextColor(colors.white)
+  term.setCursorPos(w/2-10, h/2-3)
+  print(title)
+  term.setTextColor(colors.gray)
+  term.setCursorPos(w/2-9, h/2-2)
+  term.setBackgroundColor(colors.white)
+  print(msg)
+
+end
+
+function bgChange()
+	menuClcik = false
+	slc = 5
+	lastSelection = 5
+	term.clear()
+	drawWindow()
+	titleBar()
+	if imagePath2 == "m-os/images/backgrounds/default" then
+		term.setBackgroundColor(colors.gray)
+		term.setTextColor(colors.white)
+		term.setCursorPos(2,3)
+		print("  Default  ")
+	else
+		term.setBackgroundColor(colors.white)
+		term.setTextColor(colors.gray)
+		term.setCursorPos(2,3)
+		print("  Default  ")
+	end
+	if imagePath2 == "m-os/images/backgrounds/mc" then
+		term.setBackgroundColor(colors.gray)
+		term.setTextColor(colors.white)
+		term.setCursorPos(2,4)
+		print(" Minecraft ")
+	else
+		term.setBackgroundColor(colors.white)
+		term.setTextColor(colors.gray)
+		term.setCursorPos(2,4)
+		print(" Minecraft ")
+	end
+	if imagePath2 == "m-os/images/backgrounds/cc" then
+		term.setBackgroundColor(colors.gray)
+		term.setTextColor(colors.white)
+		term.setCursorPos(2,5)
+		print("    CC     ")
+	else
+		term.setBackgroundColor(colors.white)
+		term.setTextColor(colors.gray)
+		term.setCursorPos(2,5)
+		print("    CC     ")
+	end
+	term.setBackgroundColor(colors.white)
+	term.setTextColor(colors.gray)
+	printCentered(" Your computer will reboot when you click Done.",h-3)
+	term.setCursorPos(w-7,h-2)
+	term.setBackgroundColor(colors.gray)
+	term.setTextColor(colors.lightGray)
+	print(" Done ")
+end
+
+
+function createWindow()
+  term.setBackgroundColor(1)
+  term.clear()
+  term.setCursorPos(1,1)
+  leftNavMenu1()
+  drawWindow()
+  titleBar()
+end
+
+createWindow()
+selection1()
+menuClcik = true
+
+while true do
+  createWindow()
+  if lastSelection == 1 then
+    leftNavMenu1()
+    selection1()
+  elseif lastSelection == 2 then
+    leftNavMenu2()
+    selection2()
+  elseif lastSelection == 3 then
+    leftNavMenu3()
+    selection3()
+  elseif lastSelection == 4 then
+    leftNavMenu4()
+    selection4()
+  elseif lastSelection == 5 then
+	bgChange()
+  end
+  local event, button, X, Y = os.pullEvent()
+  if event == "mouse_click" then
+    if X==w and Y==1 and button ==1 then
+      shell.run("m-os/desktop")
+	elseif X>=1 and X<=9 and Y==2 and button == 1 and menuClcik == true then
+		createWindow()
+		leftNavMenu1()
+		selection1()
+	elseif X>=1 and X<=9 and Y==3 and button == 1 and menuClcik == true then
+		createWindow()
+		leftNavMenu2()
+		selection2()
+	elseif X>=1 and X<=9 and Y==4 and button == 1 and menuClcik == true then
+		createWindow()
+		leftNavMenu3()
+		selection3()
+	elseif X>=1 and X<=9 and Y==5 and button == 1 and menuClcik == true then
+		createWindow()
+		leftNavMenu4()
+		selection4()
+    elseif X>=12 and X<=37 and Y==4 and slc == 2 and button == 1 then
+      bgChange()
+    elseif X>=12 and X<=23 and Y==8 and slc == 3 and button == 1 then
+      term.setBackgroundColor(colors.black)
+      term.clear()
+      term.setCursorPos(1,1)
+      print("Thank you for using M-OS. Your computer will reboot in 5 seconds.")
+      fs.delete("startup")
+      shell.run("pastebin get JuDHtxJt startup")
+      sleep(5)
+      os.reboot()
+    elseif X>=12 and X<=23 and Y==10 and slc == 3 and button == 1 then
+      term.setBackgroundColor(colors.black)
+      term.clear()
+      term.setCursorPos(1,1)
+      print("Thank you for using M-OS. Your computer will reboot in 5 seconds.")
+      fs.delete("startup")
+	  fs.delete("m-os")
+      sleep(5)
+      os.reboot()
+    elseif X>=12 and X<=37 and Y==4 and slc == 4 and button == 1 then
+        args()
+        titleBar()
+        term.setCursorPos(w/2-8,h/2-1)
+        term.setBackgroundColor(colors.gray)
+        term.setTextColor(colors.white)
+        term.setCursorBlink(true)
+        input = read()
+		local configfile2 = fs.open("m-os/config/pass", "w")
+		configfile2.write(input)
+    elseif X>=35 and X<=39 and Y==6 and slc == 4 and button == 1 then
+		if showBIOSonStartup == true then
+			local configfile1 = fs.open("m-os/config/showBiosOnStartup", "w")
+			configfile1.write("false")
+			showBIOSonStartup = false
+		else
+			local configfile1 = fs.open("m-os/config/showBiosOnStartup", "w")
+			configfile1.write("true")
+			showBIOSonStartup = true
+		end
+    elseif X>=35 and X<=39 and Y==8 and slc == 4 and button == 1 then
+		if updateOnStartup == true then
+			local configfile2 = fs.open("m-os/config/updateOnStartup", "w")
+			configfile2.write("false")
+			updateOnStartup = false
+		else
+			local configfile2 = fs.open("m-os/config/updateOnStartup", "w")
+			configfile2.write("true")
+			updateOnStartup = true
+		end
+	elseif X>=2 and X<=11 and Y==3 and slc == 5 then
+		local imagePath2 = fs.open("m-os/config/bgPath", "w")
+		imagePath2.write("m-os/images/backgrounds/default")
+		bgChange()
+	elseif X>=2 and X<=11 and Y==4 and slc == 5 then
+		local imagePath2 = fs.open("m-os/config/bgPath", "w")
+		imagePath2.write("m-os/images/backgrounds/mc")
+		bgChange()
+	elseif X>=2 and X<=11 and Y==5 and slc == 5 then
+		local imagePath2 = fs.open("m-os/config/bgPath", "w")
+		imagePath2.write("m-os/images/backgrounds/cc")
+		bgChange()
+	elseif X>=2 and X<=11 and Y==7 and slc == 5 then
+		local imagePath2 = fs.open("m-os/config/bgPath", "w")
+		imagePath2.write("m-os/images/backgrounds/custom")
+		shell.run("paint","m-os/images/backgrounds/custom")
+		bgChange()
+	elseif X>=w-7 and X<=w-2 and Y==h-2 and slc == 5 then
+		os.reboot()
+    end
+  end
+end
+
+local ok, err = pcall(main)
+if not ok then
+  term.setBackgroundColor(colors.red)
+  term.clear()
+  term.setBackgroundColor(colors.gray)
+  term.setCursorPos(1,1)
+  term.clearLine()
+  term.setTextColor(colors.white)
+  print("Internal System Error")
+  term.setBackgroundColor(colors.red)
+  print("The following error has occured: " .. err)
+  print("Please report this error to MarcoPolo0306. (=")
+  print("(Your computer will restart in 15 seconds.)")
+  sleep(15)
+  os.reboot()
+end

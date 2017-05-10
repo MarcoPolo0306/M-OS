@@ -1,7 +1,10 @@
+local function main()
 w,h = term.getSize()
 slc = 0
 isBuild = false
 lastSelection = 1
+local verFull = "1.2 Beta"
+
 local showBIOSonStartup = false
 local updateOnStartup = false
 local configfile1 = io.open("m-os/config/showBiosOnStartup", "r")
@@ -103,10 +106,6 @@ function selection1()
     term.setCursorPos(12,4)
     local freeSpace = fs.getFreeSpace("/")
     print("Free space: " .. freeSpace .. " bytes.")
-	term.setCursorPos(12,6)
-	term.setTextColor(colors.lightGray)
-    term.setBackgroundColor(colors.gray)
-	print(" Delete all Programs ")
 end
 
 function selection2()
@@ -132,18 +131,11 @@ function selection3()
     print("M-OS")
     term.setCursorPos(12,3)
     print("Created by MarcoPolo0306")
-    if isBuild == true then
-      term.setCursorPos(12,5)
-      print("Build date: 5/29/17")
-      term.setCursorPos(12,6)
-      print("Build version: 6")
-    else
-      term.setCursorPos(12,5)
-      print("Version realease date: 5/8/17")
-      term.setCursorPos(12,6)
-      print("Version: 1.1.8")
-      term.setCursorPos(25,6)
-    end
+    term.setCursorPos(12,5)
+    print("Version realease date: nil")
+    term.setCursorPos(12,6)
+    print("Version: "..verFull)
+    term.setCursorPos(25,6)
     term.setCursorPos(12,8)
     term.setBackgroundColor(colors.gray)
     term.setTextColor(colors.lightGray)
@@ -458,6 +450,7 @@ while true do
 		os.reboot()
     end
   end
+end
 end
 
 local ok, err = pcall(main)

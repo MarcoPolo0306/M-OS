@@ -151,6 +151,7 @@ if show == "true" then
 				end
 			elseif key == keys.enter then
 				if selection == 1 then
+					break
 					shell.run("pastebin run JuDHtxJt")
 				elseif selection == 2 then
 					break

@@ -1,6 +1,6 @@
 local configfile1 = io.open("m-os/config/pass", "r")
 local password = configfile1:read()
-local verFull = "1.2 Beta"
+local verFull = "1.2"
 
 local w,h = term.getSize()
 

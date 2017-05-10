@@ -166,6 +166,7 @@ if show == "true" then
 	fs.delete(".version")
 	term.clear()
 	term.setCursorPos(1,1)
+	end
 end
 isTrue:close()
 term.setCursorPos(1,1)

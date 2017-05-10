@@ -3,7 +3,7 @@ w,h = term.getSize()
 slc = 0
 isBuild = false
 lastSelection = 1
-local verFull = "1.2 Beta"
+local verFull = "1.2"
 
 local showBIOSonStartup = false
 local updateOnStartup = false

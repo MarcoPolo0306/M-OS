@@ -151,8 +151,8 @@ if show == "true" then
 				end
 			elseif key == keys.enter then
 				if selection == 1 then
-					break
-					shell.run("pastebin run JuDHtxJt")
+					shell.run("pastebin get JuDHtxJt install")
+					shell.run("install")
 				end
 				elseif selection == 2 then
 					break

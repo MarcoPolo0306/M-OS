@@ -159,9 +159,11 @@ local event, button, X, Y = os.pullEvent()
         term.setTextColor(colors.white)
         term.setCursorBlink(true)
         input = read()
-		shell.run("paint","pictures/"..input)
-	elseif X>2 and X<=20 and Y==10 and button == 1 then
-		shell.run("m-os/programs/installed_programs")
+	shell.run("paint","pictures/"..input)
+    elseif X>2 and X<=20 and Y==10 and button == 1 then
+	shell.run("m-os/programs/installed_programs")
+    elseif X>2 and X<=20 and Y==12 and button == 1 then
+	shell.run("m-os/programs/installed_programs")
       end
     end
 end

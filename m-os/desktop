@@ -63,10 +63,6 @@ end
 function drawMenu1()
   term.setTextColor(tBartC)
   term.setBackgroundColor(tBarC)
-  term.setCursorPos(1,h - 12)
-  print("           ")
-  term.setCursorPos(1,h - 11)
-  print("Test Crash ")
   term.setCursorPos(1,h - 10)
   print("           ")
   term.setCursorPos(1,h - 9)
@@ -131,8 +127,6 @@ while true do
      os.reboot()
    elseif X>=1 and X<=11 and Y==h - 3 and slc == 1 and button == 1 then
      os.shutdown()
-   elseif X>=1 and X<=11 and Y==h-11 and slc ==1 and button == 1 then
-	error("M-OS has crahed because you wanted it to.")
    else
 	drawDesktop()
    end

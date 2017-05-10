@@ -1,0 +1,297 @@
+local function main()
+
+slc = 0
+luaide = false
+npaint = false
+
+local w,h = term.getSize()
+
+function printCentered(msg, height)
+term.setCursorPos(w/2 - #msg/2, height)
+term.write(msg)
+end
+
+function titleBar()
+  term.setCursorPos(1,h)
+  term.setBackgroundColor(tBarC)
+  term.setTextColor(tBartC)
+  term.clearLine()
+  term.setTextColor(tBartC)
+  term.setCursorPos(1, h)
+  write(" Menu ")
+end
+
+function drawWindow()
+  local tbarC = colors.lightBlue
+  local tBartC = colors.white
+  term.setBackgroundColor(colors.white)
+  term.clear()
+  term.setCursorPos(1,1)
+  term.setBackgroundColor(tbarC)
+  term.setTextColor(tBartC)
+  term.clearLine()
+  term.setCursorPos(1,1)
+  term.setBackgroundColor(colors.gray)
+  term.setTextColor(colors.lightGray)
+  write(" <- ")
+  term.setBackgroundColor(colors.lightBlue)
+  term.setTextColor(colors.white)
+  write(" App Store")
+  term.setCursorPos(w,1)
+  term.setBackgroundColor(colors.red)
+  print("X")
+  term.setBackgroundColor(colors.white)
+  term.setTextColor(colors.gray)
+end
+
+function mainMenu()
+	
+end
+
+function nPaintPro()
+	term.clear()
+	drawWindow()
+	titleBar()
+	slc = 2
+	icon1 = paintutils.loadImage("/m-os/images/icons/nPaint")
+	paintutils.drawImage(icon1, 2, 3)
+	term.setCursorPos(6,4)
+    term.setBackgroundColor(colors.white)
+	term.setTextColor(colors.gray)
+	print("nPaintPro")
+	term.setCursorPos(2,7)
+    term.setBackgroundColor(colors.white)
+	term.setTextColor(colors.gray)
+	print("About")
+	term.setCursorPos(2,8)
+	write("nPaintPro is a program that adds a lot of things")
+	term.setCursorPos(2,9)
+	write("to the paint program.")
+	term.setCursorPos(2,11)
+	write("Auther: NitroFingers")
+	term.setCursorPos(2,13)
+	write("Rating: ")
+	term.setCursorPos(10,13)
+	term.setBackgroundColor(colors.yellow)
+	write(" ")
+	term.setCursorPos(12,13)
+	write(" ")
+	term.setCursorPos(14,13)
+	write(" ")
+	term.setCursorPos(16,13)
+	write(" ")
+	term.setCursorPos(18,13)
+	write(" ")
+	term.setCursorPos(2,15)
+	term.setBackgroundColor(colors.white)
+	write("Release Date: 14/10/12")
+	term.setCursorPos(2,16)
+	term.setBackgroundColor(colors.white)
+	write("Version: 1.4.5")
+	term.setCursorPos(2,17)
+	term.setBackgroundColor(colors.white)
+	write("App Code: aa000")
+	term.setCursorPos(20,13)
+	term.setBackgroundColor(colors.white)
+	write("(5 Stars)")
+    term.setBackgroundColor(colors.gray)
+	term.setTextColor(colors.lightGray)
+	if not fs.exists("m-os/programs/installedPrograms/nPaintPro") then
+		is1installed = false
+		term.setCursorPos(w-9,4)
+		write(" Install ")
+	else
+		is1installed = true
+		term.setCursorPos(w-11,4)
+		write(" Uninstall ")
+		term.setCursorPos(w-17,4)
+		write(" Run ")
+	end
+end
+
+function luaIDE()
+	term.clear()
+	drawWindow()
+	titleBar()
+	slc = 3
+	icon2 = paintutils.loadImage("/m-os/images/icons/unknown")
+	paintutils.drawImage(icon2, 2, 3)
+	term.setCursorPos(6,4)
+    term.setBackgroundColor(colors.white)
+	term.setTextColor(colors.gray)
+	print("Lua IDE")
+	term.setCursorPos(2,7)
+    term.setBackgroundColor(colors.white)
+	term.setTextColor(colors.gray)
+	print("About")
+	term.setCursorPos(2,8)
+	write("LuaIDE is a program thats is really useful for")
+	term.setCursorPos(2,9)
+	write("making programs.")
+	term.setCursorPos(2,11)
+	write("Auther: GravityScore")
+	term.setCursorPos(2,13)
+	write("Rating: ")
+	term.setCursorPos(10,13)
+	term.setBackgroundColor(colors.yellow)
+	write(" ")
+	term.setCursorPos(12,13)
+	write(" ")
+	term.setCursorPos(14,13)
+	write(" ")
+	term.setCursorPos(16,13)
+	write(" ")
+	term.setCursorPos(18,13)
+	write(" ")
+	term.setCursorPos(2,15)
+	term.setBackgroundColor(colors.white)
+	write("Release Date: 4/20/13")
+	term.setCursorPos(2,16)
+	term.setBackgroundColor(colors.white)
+	write("Version: 1.0")
+	term.setCursorPos(2,17)
+	term.setBackgroundColor(colors.white)
+	write("App Code: aa001")
+	term.setCursorPos(20,13)
+	term.setBackgroundColor(colors.white)
+	write("(5 Stars)")
+    term.setBackgroundColor(colors.gray)
+	term.setTextColor(colors.lightGray)
+	if not fs.exists("m-os/programs/installedPrograms/LuaIDE") then
+		is2installed = false
+		term.setCursorPos(w-9,4)
+		write(" Install ")
+	else
+		is2installed = true
+		term.setCursorPos(w-11,4)
+		write(" Uninstall ")
+		term.setCursorPos(w-17,4)
+		write(" Run ")
+	end
+end
+
+function installWindow1()
+  drawWindow()
+  titleBar()
+  nPaintPro()
+  paintutils.drawBox(w/2-10,h/2-3,w/2+10,h/2+4,colors.lightGray)
+  paintutils.drawFilledBox(w/2-9,h/2-2,w/2+9,h/2+3,colors.white)
+  paintutils.drawLine(w/2-10,h/2-3,w/2+10,h/2-3,colors.lightBlue)
+  term.setTextColor(colors.white)
+  term.setCursorPos(w/2-10, h/2-3)
+  print("Installing...")
+  term.setTextColor(colors.gray)
+  term.setCursorPos(w/2-9, h/2-2)
+  term.setBackgroundColor(colors.white)
+  print("Installing...")
+  term.setBackgroundColor(colors.white)
+  term.setCursorPos(w/2-9,h/2)
+  print("Please wait...")
+  term.setCursorPos(1,-2)
+  shell.run("pastebin get pzWSRqNF m-os/programs/installedPrograms/nPaintPro")
+end
+
+function installWindow2()
+  drawWindow()
+  titleBar()
+  nPaintPro()
+  paintutils.drawBox(w/2-10,h/2-3,w/2+10,h/2+4,colors.lightGray)
+  paintutils.drawFilledBox(w/2-9,h/2-2,w/2+9,h/2+3,colors.white)
+  paintutils.drawLine(w/2-10,h/2-3,w/2+10,h/2-3,colors.lightBlue)
+  term.setTextColor(colors.white)
+  term.setCursorPos(w/2-10, h/2-3)
+  print("Installing...")
+  term.setTextColor(colors.gray)
+  term.setCursorPos(w/2-9, h/2-2)
+  term.setBackgroundColor(colors.white)
+  print("Installing...")
+  term.setBackgroundColor(colors.white)
+  term.setCursorPos(w/2-9,h/2)
+  print("Please wait...")
+  term.setCursorPos(1,-2)
+  shell.run("pastebin get vyAZc6tJ m-os/programs/installedPrograms/LuaIDE")
+end
+
+function args()
+  slc = 2
+  drawWindow()
+  paintutils.drawBox(w/2-10,h/2-3,w/2+10,h/2+4,colors.lightGray)
+  paintutils.drawFilledBox(w/2-9,h/2-2,w/2+9,h/2+3,colors.white)
+  paintutils.drawLine(w/2-10,h/2-3,w/2+10,h/2-3,colors.lightBlue)
+  term.setTextColor(colors.white)
+  term.setCursorPos(w/2-10, h/2-3)
+  print("Open File")
+  term.setTextColor(colors.gray)
+  term.setCursorPos(w/2-9, h/2-2)
+  term.setBackgroundColor(colors.white)
+  print("Enter a image path.")
+  term.setBackgroundColor(colors.gray)
+  printCentered("                 ",h/2-1)
+  term.setCursorBlink(true)
+  term.setBackgroundColor(colors.white)
+  term.setCursorPos(w/2-9,h/2)
+  print("Press enter 2 times")
+  term.setCursorPos(w/2-9,h/2+1)
+  print("to open.")
+  term.setCursorPos(w/2-9,h/2+2)
+  print("Press Q 2 times to")
+  term.setCursorPos(w/2-9,h/2+3)
+  print("close")
+end
+
+
+drawWindow()
+titleBar()
+luaIDE()
+while true do
+drawWindow()
+titleBar()
+luaIDE()
+local event, button, X, Y = os.pullEvent()
+    if event == "mouse_click" then
+--Topbar
+      if X == w and Y==1 and button ==1 then
+        term.clear()
+        shell.run("m-os/desktop")
+      elseif X>=1 and X<= 4 and Y==1 and button ==1 then
+        term.clear()
+        shell.run("m-os/programs/installed_programs")
+--Main menu
+--nPaintPro
+	   elseif X>=w-9 and X<=w-1 and Y==4 and button ==1 and is1installed == false and slc == 2 then
+   	     installWindow1()
+	   elseif X>=w-12 and X<=w-1 and Y==4 and button ==1 and is1installed == true and slc == 2 then
+   	     fs.delete("m-os/programs/installedPrograms/nPaint")
+		 nPaintPro()
+	   elseif X>=w-16 and X<=w-13 and Y==4 and button ==1 and is1installed == true and slc == 2 then
+   	     shell.run("m-os/programs/installedPrograms/nPaint")
+--Lua IDE
+	   elseif X>=w-9 and X<=w-1 and Y==4 and button ==1 and is2installed == false and slc == 3 then
+   	     installWindow2()
+	   elseif X>=w-16 and X<=w-13 and Y==4 and button ==1 and is2installed == true and slc == 3 then
+   	     shell.run("m-os/programs/installedPrograms/LuaIDE")
+	   elseif X>=w-16 and X<=w-13 and Y==4 and button ==1 and is2installed == true and slc == 3 then
+   	     shell.run("m-os/programs/installedPrograms/LuaIDE")
+      end
+    end
+end
+end
+
+local ok, err = pcall(main)
+if not ok then
+	term.setBackgroundColor(colors.red)
+	term.clear()
+	term.setBackgroundColor(colors.gray)
+	term.setCursorPos(1,1)
+	term.clearLine()
+	term.setTextColor(colors.white)
+	print("Internal System Error")
+	term.setBackgroundColor(colors.red)
+	print("The following error has occured: " .. err)
+	print(" ")
+	print("Please report this error to MarcoPolo0306. (=")
+	print(" ")
+	print("(Your computer will restart in 30 seconds.)")
+	sleep(31)
+	os.reboot()
+end

@@ -156,7 +156,7 @@ if show == "true" then
 					break
 				end
 			end
-		end
+		 end
 	else	
 		printCentered("No Updates were found.",h/2+6)
 	end

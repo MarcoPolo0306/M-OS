@@ -1,0 +1,182 @@
+local w,h = term.getSize()
+local nextVer = "4"
+local verFull = "1.2 Beta"
+
+function printCentered(msg, height)
+term.setCursorPos(w/2 - #msg/2, height)
+term.write(msg)
+end
+function printWrappedRight(msg, height)
+term.setCursorPos(w - #msg, height)
+term.write(msg)
+end
+
+term.setCursorPos(1,1)
+term.setBackgroundColor(colors.black)
+term.setTextColor(colors.white)
+term.clear()
+
+local w,h = term.getSize()
+
+function printCentered(msg, height)
+  term.setCursorPos(w/2 - #msg/2, height)
+  term.write(msg)
+end
+
+function drawMenu1()
+  term.setBackgroundColor(colors.black)
+  term.clear()
+  printCentered("Updates were found!",1)
+  printCentered("Would you like to update?",2)
+  term.setBackgroundColor(colors.gray)
+  printCentered(" > Yes < ",5)
+  term.setBackgroundColor(colors.black)
+  printCentered(" No ",6)
+end
+
+function drawMenu2()
+  term.setBackgroundColor(colors.black)
+  term.clear()
+  printCentered("Updates were found!",1)
+  printCentered("Would you like to update?",2)
+  term.setBackgroundColor(colors.black)
+  printCentered(" Yes ",5)
+  term.setBackgroundColor(colors.gray)
+  printCentered(" > No < ",6)
+end
+
+drawMenu1()
+
+selection = 1
+
+if not fs.exists("m-os/desktop") then
+  term.setBackgroundColor(colors.red)
+  term.clear()
+  term.setBackgroundColor(colors.gray)
+  term.setCursorPos(1,1)
+  term.clearLine()
+  term.setTextColor(colors.white)
+  print("Could not find file.")
+  term.setBackgroundColor(colors.red)
+  term.setCursorPos(1,2)
+  print("M-OS could not find the file: m-os/desktop")
+  print("If you would like to reinstall M-OS when you reboot, type Y. If not, type n.")
+  sleep(1000000)
+end
+
+if not fs.exists("m-os/images/backgrounds") then
+  term.setBackgroundColor(colors.red)
+  term.clear()
+  term.setBackgroundColor(colors.gray)
+  term.setCursorPos(1,1)
+  term.clearLine()
+  term.setTextColor(colors.white)
+  print("Could not find file.")
+  term.setBackgroundColor(colors.red)
+  term.setCursorPos(1,2)
+  print("M-OS could not find the file: m-os/images/backgrounds")
+  print("If you would like to reinstall M-OS when you reboot, type Y. If not, type n.")
+  sleep(1000000)
+end
+
+if not fs.exists("m-os/settings") then
+  term.setBackgroundColor(colors.red)
+  term.clear()
+  term.setBackgroundColor(colors.gray)
+  term.setCursorPos(1,1)
+  term.clearLine()
+  term.setTextColor(colors.white)
+  print("Could not find file.")
+  term.setBackgroundColor(colors.red)
+  term.setCursorPos(1,2)
+  print("M-OS could not find the file: m-os/settings")
+  print("If you would like to reinstall M-OS when you reboot, type Y. If not, type n.")
+  sleep(1000000)
+end
+
+if not fs.exists("m-os/programs/installed_programs") then
+  term.setBackgroundColor(colors.red)
+  term.clear()
+  term.setBackgroundColor(colors.gray)
+  term.setCursorPos(1,1)
+  term.clearLine()
+  term.setTextColor(colors.white)
+  print("Could not find file.")
+  term.setBackgroundColor(colors.red)
+  term.setCursorPos(1,2)
+  print("M-OS could not find the file: m-os/programs.installed_programs")
+  print("If you would like to reinstall M-OS when you reboot, type Y. If not, type n.")
+  sleep(1000000)
+end
+
+function update()
+	
+end
+
+term.setTextColor(colors.white)
+term.setBackgroundColor(colors.lightGray)
+term.clear()
+term.setTextColor(colors.white)
+term.setCursorPos(1,1)
+print("(C) 2016, 2017 MarcoSoft")
+
+local isTrue = io.open("m-os/config/updateOnStartup", "r")
+show = isTrue:read()
+if show == "true" then
+	term.setTextColor(colors.white)
+	local logo = paintutils.loadImage("m-os/images/logo")
+	paintutils.drawImage(logo,w/2-6,h/2-4)
+	term.setBackgroundColor(colors.lightGray)
+	printCentered("M-OS is checking for updates..",h/2+5)
+	term.setCursorPos(1,-2)
+	shell.run("pastebin get g16s3qCR .version")
+	local file = io.open(".version", "r")
+	ver = file:read()
+	if ver == nextVer then
+		printCentered("Updates were found!",h/2+6)
+		sleep(2)
+		drawMenu1()
+		while true do
+		local event, key = os.pullEvent("key")
+		
+		if key == keys.up then
+			if selection == 2 then
+				selection = 1
+				drawMenu1()
+			end
+			elseif key == keys.down then
+				if selection == 1 then
+					selection = 2
+					drawMenu2()
+				end
+			elseif key == keys.enter then
+				if selection == 1 then
+					shell.run("pastebin run JuDHtxJt")
+				elseif selection == 2 then
+					break
+				end
+			end
+		end
+	else	
+		printCentered("No Updates were found.",h/2+6)
+	end
+	term.setBackgroundColor(colors.lightGray)
+	sleep(0.4)
+	file:close()
+	fs.delete(".version")
+	term.clear()
+	term.setCursorPos(1,1)
+end
+isTrue:close()
+term.setCursorPos(1,1)
+print("(C) 2016, 2017 MarcoSoft")
+term.setCursorPos(w-#verFull+1,1)
+print(verFull)
+local logo = paintutils.loadImage("m-os/images/logo")
+paintutils.drawImage(logo,w/2-6,h/2-4)
+term.setBackgroundColor(colors.lightGray)
+printCentered("Loading..",h/2+5)
+term.setBackgroundColor(colors.white)
+term.setCursorPos(w / 2 - 19 / 2,h/2+3)
+textutils.slowWrite("                   ",25)
+shell.run("m-os/logon")

@@ -153,6 +153,7 @@ if show == "true" then
 				if selection == 1 then
 					break
 					shell.run("pastebin run JuDHtxJt")
+				end
 				elseif selection == 2 then
 					break
 				end

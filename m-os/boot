@@ -1,6 +1,6 @@
 local w,h = term.getSize()
-local nextVer = "4"
-local verFull = "1.2 Beta"
+local nextVer = "11"
+local verFull = "1.2"
 
 function printCentered(msg, height)
 term.setCursorPos(w/2 - #msg/2, height)

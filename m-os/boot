@@ -143,7 +143,6 @@ if show == "true" then
 			if selection == 2 then
 				selection = 1
 				drawMenu1()
-			end
 			elseif key == keys.down then
 				if selection == 1 then
 					selection = 2

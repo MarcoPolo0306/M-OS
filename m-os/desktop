@@ -136,12 +136,6 @@ end
 
 local ok, err = pcall(main)
 if not ok then
-	sleep(1)
-	term.setBackgroundColor(colors.black)
-	slc = 2147483647
-	sleep(0.3)
-	term.clear()
-	sleep(0.4)
 	term.setBackgroundColor(colors.red)
 	term.clear()
 	term.setBackgroundColor(colors.gray)
@@ -151,12 +145,16 @@ if not ok then
 	print("Internal System Error")
 	term.setBackgroundColor(colors.red)
 	print("The following error has occured: " .. err)
-	print("")
 	print("Please report this error to MarcoPolo0306. (=")
 	print("")
-	print("(Your computer will restart in 30 seconds.)")
-	sleep(31)
-	os.reboot()
+	write("Press any key...")
+	term.setCursorBlink(true)
+	while true do
+		local event, key, isHeld = os.pullEvent("key")
+		if key then
+			os.reboot()
+		end
+	end
 end
 
 

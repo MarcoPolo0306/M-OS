@@ -137,26 +137,26 @@ if show == "true" then
 		sleep(2)
 		drawMenu1()
 		while true do
-		local event, key = os.pullEvent("key")
-		
-		if key == keys.up then
-			if selection == 2 then
-				selection = 1
-				drawMenu1()
-			elseif key == keys.down then
-				if selection == 1 then
-					selection = 2
-					drawMenu2()
-				end
-			elseif key == keys.enter then
-				if selection == 1 then
+			local event, key = os.pullEvent("key")
+			
+			if key == keys.up then
+				if selection == 2 then
+					selection = 1
+					drawMenu1()
+				elseif key == keys.down then
+					if selection == 1 then
+						selection = 2
+						drawMenu2()
+					end
+				elseif key == keys.enter then
+					if selection == 1 then
 					shell.run("pastebin get JuDHtxJt install")
 					shell.run("install")
 				elseif selection == 2 then
 					break
 				end
 			end
-		 end
+		end
 	else	
 		printCentered("No Updates were found.",h/2+6)
 	end
@@ -166,7 +166,6 @@ if show == "true" then
 	fs.delete(".version")
 	term.clear()
 	term.setCursorPos(1,1)
-	end
 end
 isTrue:close()
 term.setCursorPos(1,1)

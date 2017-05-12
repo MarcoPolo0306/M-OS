@@ -1,5 +1,5 @@
 local w,h = term.getSize()
-local nextVer = "12"
+local nextVer = "13"
 local verFull = "1.2.0.1"
 
 function printCentered(msg, height)

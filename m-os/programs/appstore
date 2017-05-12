@@ -3,6 +3,7 @@ local function main()
 slc = 0
 luaide = false
 npaint = false
+lastSel = 1
 
 local w,h = term.getSize()
 
@@ -44,8 +45,50 @@ function drawWindow()
   term.setTextColor(colors.gray)
 end
 
+function topBarMenu(s)
+	term.setCursorPos(1,2)
+	term.setBackgroundColor(colors.lightGray)
+	term.setTextColor(colors.gray)
+	term.clearLine()
+	term.setCursorPos(2,2)
+	if s == 1 then
+		term.setBackgroundColor(colors.gray)
+		term.setTextColor(colors.lightGray)
+		write("Home")
+	else
+		term.setBackgroundColor(colors.lightGray)
+		term.setTextColor(colors.gray)
+		write("Home")
+	end
+	term.setCursorPos(7,2)
+	if s == 2 then
+		term.setBackgroundColor(colors.gray)
+		term.setTextColor(colors.lightGray)
+		write("Programs")
+	else
+		term.setBackgroundColor(colors.lightGray)
+		term.setTextColor(colors.gray)
+		write("Programs")
+	end
+end
+
 function mainMenu()
-	
+	slc = 1
+	lastSel = 1
+	term.setBackgroundColor(colors.white)
+	term.setTextColor(colors.gray)
+	term.setCursorPos(string.len("Welcome to the App Store")/2+2, 3)
+	print("Welcome to the App Store")
+	icon1 = paintutils.loadImage("/m-os/images/icons/nPaint")
+	paintutils.drawImage(icon1, 2, 5)
+	term.setCursorPos(1,8)
+	term.setBackgroundColor(colors.white)
+	print("nPaint")
+	icon2 = paintutils.loadImage("/m-os/images/icons/unknown")
+	paintutils.drawImage(icon2, 9, 5)
+	term.setCursorPos(8,8)
+	term.setBackgroundColor(colors.white)
+	print("LuaIDE")
 end
 
 function nPaintPro()
@@ -239,14 +282,18 @@ function args()
   print("close")
 end
 
+slc = 1
 
-drawWindow()
-titleBar()
-luaIDE()
 while true do
 drawWindow()
 titleBar()
-luaIDE()
+if slc == 1 then
+	mainMenu()
+elseif slc == 2 then
+	nPaintPro()
+elseif slc == 3 then
+	luaIDE()
+end
 local event, button, X, Y = os.pullEvent()
     if event == "mouse_click" then
 --Topbar
@@ -254,9 +301,18 @@ local event, button, X, Y = os.pullEvent()
         term.clear()
         shell.run("m-os/desktop")
       elseif X>=1 and X<= 4 and Y==1 and button ==1 then
-        term.clear()
-        shell.run("m-os/programs/installed_programs")
+        if lastSel == 1 then
+			shell.run("m-os/programs/installed_programs")
+		elseif lastSel == 2 then
+			mainMenu()
+		end
 --Main menu
+		elseif X>=1 and X<=6 and Y>=5 and Y<=9 and slc == 1 then 
+			lastSel = 2
+			nPaintPro()
+		elseif X>=9 and X<=14 and Y>=5 and Y<=9 and slc == 1 then 
+			lastSel = 2
+			luaIDE()
 --nPaintPro
 	   elseif X>=w-9 and X<=w-1 and Y==4 and button ==1 and is1installed == false and slc == 2 then
    	     installWindow1()

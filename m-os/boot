@@ -63,8 +63,6 @@ else
 	updateOnStartup = true
 end
 
-sleep(1)
-
 if updateOnStartup == true then
 	shell.run("pastebin", "get", "g16s3qCR", "m-os/ver")
 	local verfile = io.open("m-os/ver", "r")
@@ -81,8 +79,10 @@ if updateOnStartup == true then
 	verfile:close()
 	fs.delete("m-os/ver")
 	sleep(1)
+	shell.run("m-os/logon")
 else
 	sleep(1)
+	shell.run("m-os/logon")
 end
 
 shell.run("m-os/logon")

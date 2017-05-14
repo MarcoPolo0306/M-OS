@@ -237,7 +237,7 @@ end
 function installWindow2()
   drawWindow()
   titleBar()
-  nPaintPro()
+  luaIDE()
   paintutils.drawBox(w/2-10,h/2-3,w/2+10,h/2+4,colors.lightGray)
   paintutils.drawFilledBox(w/2-9,h/2-2,w/2+9,h/2+3,colors.white)
   paintutils.drawLine(w/2-10,h/2-3,w/2+10,h/2-3,colors.lightBlue)
@@ -253,6 +253,7 @@ function installWindow2()
   print("Please wait...")
   term.setCursorPos(1,-2)
   shell.run("pastebin get vyAZc6tJ m-os/programs/installedPrograms/LuaIDE")
+  luaIDE()
 end
 
 function args()
@@ -282,11 +283,38 @@ function args()
   print("close")
 end
 
+function warning()
+  slc = 2
+  drawWindow()
+  paintutils.drawBox(w/2-10,h/2-3,w/2+10,h/2+3,colors.lightGray)
+  paintutils.drawFilledBox(w/2-9,h/2-2,w/2+9,h/2+2,colors.white)
+  paintutils.drawLine(w/2-10,h/2-3,w/2+10,h/2-3,colors.lightBlue)
+  term.setTextColor(colors.white)
+  term.setCursorPos(w/2-10, h/2-3)
+  print("Enter password")
+  term.setTextColor(colors.gray)
+  term.setCursorPos(w/2-9, h/2-2)
+  term.setBackgroundColor(colors.white)
+  print("Enter your password")
+  term.setBackgroundColor(colors.gray)
+  printCentered("                 ",h/2-1)
+  term.setBackgroundColor(colors.white)
+  term.setCursorPos(w/2-9,h/2)
+  print("You must enter")
+  term.setCursorPos(w/2-9,h/2+1)
+  print("your password to")
+  term.setCursorPos(w/2-9,h/2+2)
+  print("install.")
+end
+
+warning()
+
 slc = 1
 
 while true do
 drawWindow()
 titleBar()
+warning()
 if slc == 1 then
 	mainMenu()
 elseif slc == 2 then
@@ -294,6 +322,7 @@ elseif slc == 2 then
 elseif slc == 3 then
 	luaIDE()
 end
+warning()
 local event, button, X, Y = os.pullEvent()
     if event == "mouse_click" then
 --Topbar
@@ -302,31 +331,40 @@ local event, button, X, Y = os.pullEvent()
         shell.run("m-os/desktop")
       elseif X>=1 and X<= 4 and Y==1 and button ==1 then
         if lastSel == 1 then
-			shell.run("m-os/programs/installed_programs")
+			shell.run("m-os/programs/programs")
 		elseif lastSel == 2 then
 			mainMenu()
 		end
 --Main menu
 		elseif X>=1 and X<=6 and Y>=5 and Y<=9 and slc == 1 then 
 			lastSel = 2
+			term.setCursorPos(1,8)
+			term.setBackgroundColor(colors.lightGray)
+			print("nPaint")
+			sleep(0.1)
 			nPaintPro()
 		elseif X>=9 and X<=14 and Y>=5 and Y<=9 and slc == 1 then 
 			lastSel = 2
+			term.setCursorPos(8,8)
+			term.setBackgroundColor(colors.lightGray)
+			print("LuaIDE")
+			sleep(0.1)
 			luaIDE()
 --nPaintPro
-	   elseif X>=w-9 and X<=w-1 and Y==4 and button ==1 and is1installed == false and slc == 2 then
+	   elseif X>=w-9 and X<=w-1 and Y==4 and button ==1 and not fs.exists("m-os/programs/installedPrograms/nPaintPro") and slc == 2 then
    	     installWindow1()
-	   elseif X>=w-12 and X<=w-1 and Y==4 and button ==1 and is1installed == true and slc == 2 then
-   	     fs.delete("m-os/programs/installedPrograms/nPaint")
+	   elseif X>=w-12 and X<=w-1 and Y==4 and button ==1 and fs.exists("m-os/programs/installedPrograms/nPaintPro") and slc == 2 then
+   	     fs.delete("m-os/programs/installedPrograms/nPaintPro")
 		 nPaintPro()
-	   elseif X>=w-16 and X<=w-13 and Y==4 and button ==1 and is1installed == true and slc == 2 then
-   	     shell.run("m-os/programs/installedPrograms/nPaint")
+	   elseif X>=w-16 and X<=w-13 and Y==4 and button ==1 and fs.exists("m-os/programs/installedPrograms/nPaintPro") and slc == 2 then
+   	     shell.run("m-os/programs/installedPrograms/nPaintPro")
 --Lua IDE
-	   elseif X>=w-9 and X<=w-1 and Y==4 and button ==1 and is2installed == false and slc == 3 then
+	   elseif X>=w-9 and X<=w-1 and Y==4 and button ==1 and not fs.exists("m-os/programs/installedPrograms/LuaIDE") and slc == 3 then
    	     installWindow2()
-	   elseif X>=w-16 and X<=w-13 and Y==4 and button ==1 and is2installed == true and slc == 3 then
-   	     shell.run("m-os/programs/installedPrograms/LuaIDE")
-	   elseif X>=w-16 and X<=w-13 and Y==4 and button ==1 and is2installed == true and slc == 3 then
+	   elseif X>=w-12 and X<=w-1 and Y==4 and button ==1 and fs.exists("m-os/programs/installedPrograms/LuaIDE") and slc == 3 then
+   	     fs.delete("m-os/programs/installedPrograms/LuaIDE")
+		 luaIDE()
+	   elseif X>=w-16 and X<=w-13 and Y==4 and button ==1 and fs.exists("m-os/programs/installedPrograms/LuaIDE") and slc == 3 then
    	     shell.run("m-os/programs/installedPrograms/LuaIDE")
       end
     end

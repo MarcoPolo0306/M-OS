@@ -74,7 +74,6 @@ if updateOnStartup == true then
 		printCentered("Intalizing updates",15)
 		term.setCursorPos(1,-2)
 		shell.run("pastebin run Tqe3KUbu")
-		sleep(10)
 	end
 	verfile:close()
 	fs.delete("m-os/ver")

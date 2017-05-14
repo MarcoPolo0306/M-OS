@@ -1,5 +1,5 @@
 local w,h = term.getSize()
-local nextVer = "0"
+local nextVer = "14"
 
 function printCentered(msg, height)
 term.setCursorPos(w/2 - #msg/2, height)
@@ -84,4 +84,6 @@ if updateOnStartup == true then
 else
 	sleep(1)
 end
+
+shell.run("m-os/logon")
 

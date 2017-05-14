@@ -307,14 +307,11 @@ function warning()
   print("install.")
 end
 
-warning()
-
 slc = 1
 
 while true do
 drawWindow()
 titleBar()
-warning()
 if slc == 1 then
 	mainMenu()
 elseif slc == 2 then

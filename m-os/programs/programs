@@ -4,6 +4,11 @@ slc = 0
 
 local w,h = term.getSize()
 
+npaintBpos=1000
+npaintEpos=1000
+ideBpos=1000
+ideEpos=1000
+
 function printCentered(msg, height)
 term.setCursorPos(w/2 - #msg/2, height)
 term.write(msg)
@@ -66,18 +71,39 @@ function installedPrograms()
   term.setTextColor(colors.gray)
   term.setCursorPos(2,8)
   print("Installed Programs")
-  term.setCursorPos(2,10)
+  xPos=2
   if not fs.exists("m-os/programs/installedPrograms") then
-	print("You have no programs yet!")
+	term.setCursorPos(2,10)
+	print("You have no programs!")
 	term.setCursorPos(2,12)
 	term.setBackgroundColor(colors.gray)
 	term.setTextColor(colors.lightGray)
 	print(" Get some now! ")
   else
-  	term.setCursorPos(2,10)
+	term.setCursorPos(w-string.len(" Get more programs "),8)
 	term.setBackgroundColor(colors.gray)
 	term.setTextColor(colors.lightGray)
-	print(" View your Programs ")
+	print(" Get more programs ")
+  end
+  if fs.exists("m-os/programs/installedPrograms/nPaintPro") then
+	icon1 = paintutils.loadImage("/m-os/images/icons/nPaint")
+	paintutils.drawImage(icon1, xPos, 10)
+	term.setCursorPos(xPos-1,13)
+	term.setBackgroundColor(colors.white)
+	print("nPaint")
+	npaintBpos = xPos
+	npaintEpos = xPos+6
+	xPos=xPos+6
+  end
+  if fs.exists("m-os/programs/installedPrograms/LuaIDE") then
+	icon2 = paintutils.loadImage("/m-os/images/icons/unknown")
+	paintutils.drawImage(icon2, xPos+1, 10)
+	term.setCursorPos(xPos,13)
+	term.setBackgroundColor(colors.white)
+	print("LuaIDE")
+	ideBpos = xPos
+	ideEpos = xPos+6
+	xPos=xPos+5
   end
 end
 
@@ -159,11 +185,15 @@ local event, button, X, Y = os.pullEvent()
         term.setTextColor(colors.white)
         term.setCursorBlink(true)
         input = read()
-	shell.run("paint","pictures/"..input)
-    elseif X>2 and X<=20 and Y==10 and button == 1 then
-	shell.run("m-os/programs/installed_programs")
-    elseif X>2 and X<=20 and Y==12 and button == 1 then
-	shell.run("m-os/programs/installed_programs")
+		shell.run("paint","pictures/"..input)
+	elseif X>=2 and X<=20 and Y==12 and not fs.exists("m-os/programs/installedPrograms") and button == 1 then
+		shell.run("m-os/programs/appstore")
+	elseif X>=w-string.len(" Get more programs ") and X<=w-1 and Y==8 and fs.exists("m-os/programs/installedPrograms") and button == 1 then
+		shell.run("m-os/programs/appstore")
+	elseif X>=npaintBpos and X<=npaintEpos and Y==13 and button==1 and fs.exists("m-os/programs/installedPrograms/nPaintPro") then
+		shell.run("m-os/programs/installedPrograms/nPaintPro")
+	elseif X>=ideBpos and X<=ideEpos and Y==13 and button==1 and fs.exists("m-os/programs/installedPrograms/LuaIDE") then
+		shell.run("m-os/programs/installedPrograms/LuaIDE")
       end
     end
 end
@@ -175,7 +205,6 @@ local event, key = os.pullEvent("key")
     end
 end
 end
-
 local ok, err = pcall(main)
 if not ok then
 	term.setBackgroundColor(colors.red)

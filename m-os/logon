@@ -1,4 +1,4 @@
-function main()
+local function main()
 local configfile1 = io.open("m-os/config/pass", "r")
 local password = configfile1:read()
 local verFull = "M-OS 2.0"
@@ -96,6 +96,7 @@ local err, ok = pcall(main)
 
 if not ok then
 	term.setBackgroundColor(colors.white)
-	printCentered("Error: ",12)
+	term.setCursorPos(string.len("Error: "..err),12)
+	print("Error: "..err)
 	sleep(100)
 end

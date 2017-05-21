@@ -1,6 +1,7 @@
+function main()
 local configfile1 = io.open("m-os/config/pass", "r")
 local password = configfile1:read()
-local verFull = "1.2.1"
+local verFull = "M-OS 2.0 build "..fs.getSize("m-os/desktop")
 
 local w,h = term.getSize()
 
@@ -13,57 +14,88 @@ if password == nil then
   shell.run("m-os/desktop")
 end
 
-term.setBackgroundColor(colors.white)
-term.clear()
+function drawMenu(text)
+	term.setBackgroundColor(colors.white)
+	term.clear()		
 
-term.setCursorPos(1,1)
-imagePath = io.open("m-os/config/bgPath", "r")
-local imagePath2 = imagePath:read()
-image = paintutils.loadImage(imagePath2)
-paintutils.drawImage(image,1,1)
-sleep(1)
-term.setBackgroundColor(colors.white)
-term.setTextColor(colors.gray)
-term.setCursorPos(1,1)
-print("(C) 2016, 2017 MarcoSoft")
-term.setCursorPos(w-#verFull+1,1)
-print(verFull)
-paintutils.drawFilledBox(w/2-13,h/2-6,w/2+13,h/2+4,colors.lightGray)
+	term.setTextColor(colors.gray)
+	printCentered(verFull,h-1)
+	printCentered("© MarcoSoft, 2017",h)
+	
+	local userpiciture = paintutils.loadImage("m-os/images/UserPiciture")
+	paintutils.drawImage(userpiciture,w/2-13/2,2)
+	term.setBackgroundColor(colors.white)
+	printCentered(text,12)
+	paintutils.drawLine(w/2-15,14,w/2+15,14,colors.lightGray)
+	term.setCursorPos(w/2-15,14)
+	term.setCursorBlink(true)
+end
+
+function tma()
+	term.setBackgroundColor(colors.white)
+	term.clear()		
+
+	term.setTextColor(colors.gray)
+	printCentered(verFull,h-1)
+	printCentered("© MarcoSoft, 2017",h)
+	
+	local userpiciture = paintutils.loadImage("m-os/images/UserPiciture")
+	paintutils.drawImage(userpiciture,w/2-13/2,2)
+	term.setBackgroundColor(colors.white)
+	printCentered("To many attemps.",13)
+	printCentered(" Please wait 1 minuite, then you can try again.",14)
+	term.setCursorBlink(false)
+end
+
+function welcome()	
+	term.setBackgroundColor(colors.white)
+	term.clear()		
+
+	term.setTextColor(colors.gray)
+	printCentered(verFull,h-1)
+	printCentered("© MarcoSoft, 2017",h)
+	
+	local userpiciture = paintutils.loadImage("m-os/images/UserPiciture")
+	paintutils.drawImage(userpiciture,w/2-13/2,2)
+	term.setBackgroundColor(colors.white)
+	printCentered("Welcome!",14)
+	term.setCursorBlink(false)
+	sleep(1)
+	shell.run("m-os/desktop")
+end
+
+if fs.exists(".tma") then
+	tma()
+	sleep(60)
+	fs.delete(".tma")
+	drawMenu("Please log in.")
+end
+
+drawMenu("Please log in.")
+attempt = 0
 
 while true do
-printCentered("Enter your password.",h/2-5)
- term.setCursorPos(w/2 - 25/2, h/2-2)
- print("Password: ")
- term.setCursorPos(w/2-2, h/2-2)
- local input = read("*")
- if input == password then
-  term.setBackgroundColor(colors.white)
-  term.clear()
-  term.setCursorPos(1,1)
-  paintutils.drawImage(image,1,1)
-  term.setBackgroundColor(colors.white)
-  term.setTextColor(colors.gray)
-  term.setCursorPos(1,1)
-  print("(C) 2016, 2017 MarcoSoft")
-  term.setCursorPos(w-#verFull+1,1)
-  print(verFull)
-  paintutils.drawFilledBox(w/2-13,h/2-6,w/2+13,h/2+4,colors.lightGray)
-  printCentered("Welcome!",h/2-2)
-  sleep(1)
-  shell.run("m-os/desktop")
- else
-  term.setBackgroundColor(colors.white)
-  term.clear()
-  term.setCursorPos(1,1)
-  paintutils.drawImage(image,1,1)
-  term.setBackgroundColor(colors.white)
-  term.setTextColor(colors.gray)
-  term.setCursorPos(1,1)
-  print("(C) 2016, 2017 MarcoSoft")
-  term.setCursorPos(w-#verFull+1,1)
-  print(verFull)
-  paintutils.drawFilledBox(w/2-13,h/2-6,w/2+13,h/2+4,colors.lightGray)
-  printCentered("Enter your password.",h/2-5)
-  printCentered("Please try again.",h/2)
- end
+	input = read("*")
+	if input == password then
+		welcome()
+	elseif attempt == 5 then
+		tma()
+		term.setCursorPos(1,-2)
+		shell.run("pastebin get GMmf19N6 .tma")
+		sleep(60)
+		fs.delete(".tma")
+		drawMenu("Please log in.")
+	else
+		attempt = attempt + 1
+		drawMenu("Password incorrect.")
+	end
+end
+end
+
+local err, ok = pcall(main)
+
+if not ok then
+	term.setBackgroundColor(colors.white)
+	printCentered("Error: ",12)
+	sleep(100)
 end

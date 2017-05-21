@@ -1,0 +1,157 @@
+local w,h = term.getSize()
+
+slc = 0
+local themeF = io.open("m-os/config/theme",r)
+local theme = themeF:read()
+if theme == "default" then
+	tBarC = colors.lightBlue
+	tBartC = colors.white
+	cBarC = colors.lightGray
+	cBartC = colors.lightGray
+elseif theme == "minecraft" then
+	tBarC = colors.green
+	tBartC = colors.brown
+	cBarC = colors.lime
+	cBartC = colors.black
+end
+isBuild = true
+term.setBackgroundColor(backColor)
+term.clear()
+
+function time()
+  local time = os.time()
+  local fTime = textutils.formatTime(time, false)
+  term.setCursorPos(w - 7, h)
+  term.setBackgroundColor(tBarC)
+  term.setTextColor(tBartC)
+  write(fTime)
+end
+
+function titleBar()
+  term.setCursorPos(1,h)
+  term.setBackgroundColor(tBarC)
+  term.setTextColor(tBartC)
+  term.clearLine()
+  term.setTextColor(tBartC)
+  term.setCursorPos(1, h)
+  write(" Menu ")
+  term.setCursorPos(w - 5, h)
+end
+
+function titleBarMenuClick()
+  term.setCursorPos(1,h)
+  term.setBackgroundColor(tBarC)
+  term.setTextColor(tBartC)
+  term.clearLine()
+  term.setBackgroundColor(colors.gray)
+  term.setTextColor(colors.lightGray)
+  term.setCursorPos(1, h)
+  
+  write(" Menu ")
+end
+
+function drawDesktop()
+  slc = 0
+  term.setBackgroundColor(backColor)
+  term.clear()
+  imagePath = io.open("m-os/config/bgPath", "r")
+  local imagePath2 = imagePath:read()
+  bground = paintutils.loadImage(imagePath2)
+  if imagePath == "m-os/images/backgrounds/xp" then
+	x = 62
+  else
+	x=53
+  end
+  paintutils.drawImage(bground,x/2-w/2,h/2-h/2)
+  titleBar()
+  if isBuild == true then
+    term.setBackgroundColor(colors.white)
+    term.setTextColor(colors.lightGray)
+    term.setCursorPos(w-string.len("M-OS 1.3 Deveolper Preview")+1,h-2)
+    print("M-OS 1.3 Deveolper Preview")
+    term.setCursorPos(w-string.len("build-"..fs.getSize("m-os/desktop")..", build date: 5/17/17")+1,h-1)
+    print("build-"..fs.getSize("m-os/desktop")..", build date: 5/17/17") 
+  end
+end
+
+function dialog(text,options,selection)
+	slc = 2
+	drawDesktop()
+	term.setTextColor(tBartC)
+	paintutils.drawFilledBox(w/2-string.len(text)/2-1,h/2-3,w/2+string.len(text)/2,h/2+4,tBarC)
+	term.setCursorPos(w/2-string.len(text)/2,h/2-2)
+	print(text)
+	if options == "shutdown" then
+		if selection == 1 then
+			term.setBackgroundColor(cBarC)
+			term.setCursorPos(w/2-8/2,h/2)
+			print(" Logoff ")
+		else
+			term.setBackgroundColor(tBarC)
+			term.setCursorPos(w/2-8/2,h/2)
+			print(" Logoff ")
+		end
+		if selection == 2 then
+			term.setBackgroundColor(cBarC)
+			term.setCursorPos(w/2-9/2,h/2+1)
+			print(" Restart ")
+		else
+			term.setBackgroundColor(tBarC)
+			term.setCursorPos(w/2-9/2,h/2+1)
+			print(" Restart ")
+		end
+		if selection == 3 then
+			term.setBackgroundColor(cBarC)
+			term.setCursorPos(w/2-10/2,h/2+2)
+			print(" Shutdown ")
+		else
+			term.setBackgroundColor(tBarC)
+			term.setCursorPos(w/2-10/2,h/2+2)
+			print(" Shutdown ")
+		end
+		if selection == 4 then
+			term.setBackgroundColor(cBarC)
+			term.setCursorPos(w/2-8/2,h/2+3)
+			print(" Cancel ")
+		else
+			term.setBackgroundColor(tBarC)
+			term.setCursorPos(w/2-8/2,h/2+3)
+			print(" Cancel ")
+		end
+	end
+end
+
+drawDesktop()
+dialog("What do you want to do?","shutdown",1)
+sel = 1
+
+while true do
+	local event, key = os.pullEvent("key")
+	if key == keys.down and sel == 1 then
+		sel = 2
+		dialog("What do you want to do?","shutdown",2)
+	elseif key == keys.down and sel == 2 then
+		sel = 3
+		dialog("What do you want to do?","shutdown",3)
+	elseif key == keys.down and sel == 3 then
+		sel = 4
+		dialog("What do you want to do?","shutdown",4)
+	elseif key == keys.up and sel == 2 then
+		sel = 1
+		dialog("What do you want to do?","shutdown",1)
+	elseif key == keys.up and sel == 3 then
+		sel = 2
+		dialog("What do you want to do?","shutdown",2)
+	elseif key == keys.up and sel == 4 then
+		sel = 3
+		dialog("What do you want to do?","shutdown",3)
+	elseif key == keys.enter and sel == 1 then
+		shell.run("m-os/logon")
+	elseif key == keys.enter and sel == 2 then
+		os.reboot()
+	elseif key == keys.enter and sel == 3 then
+		os.shutdown()
+	elseif key == keys.enter and sel == 4 then
+		shell.run("m-os/desktop")
+    end
+end

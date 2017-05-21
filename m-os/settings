@@ -3,7 +3,21 @@ w,h = term.getSize()
 slc = 0
 isBuild = false
 lastSelection = 1
-local verFull = "1.2"
+local verFull = "1.2 Beta"
+
+local themeF = io.open("m-os/config/theme",r)
+local theme = themeF:read()
+if theme == "default" then
+	tBarC = colors.lightBlue
+	tBartC = colors.white
+	cBarC = colors.lightGray
+	cBartC = colors.gray
+elseif theme == "minecraft" then
+	tBarC = colors.green
+	tBartC = colors.brown
+	cBarC = colors.lime
+	cBartC = colors.black
+end
 
 local showBIOSonStartup = false
 local updateOnStartup = false
@@ -33,17 +47,18 @@ end
 
 function titleBar()
   term.setCursorPos(1,h)
-  term.setBackgroundColor(colors.lightBlue)
-  term.setTextColor(colors.white)
+  term.setBackgroundColor(tBarC)
+  term.setTextColor(tBartC)
   term.clearLine()
-  term.setTextColor(colors.white)
+  term.setTextColor(tBartC)
   term.setCursorPos(1, h)
   write(" Menu ")
 end
 
 function leftNavMenu1()
   term.setCursorPos(1,2)
-  term.setBackgroundColor(colors.gray)
+  term.setTextColor(cBartC)
+  term.setBackgroundColor(cBarC)
   print(" Storage ")
   term.setTextColor(colors.gray)
   term.setBackgroundColor(colors.white)
@@ -58,8 +73,8 @@ function leftNavMenu2()
   term.setTextColor(colors.gray)
   term.setBackgroundColor(colors.white)
   print(" Storage ")
-  term.setTextColor(colors.white)
-  term.setBackgroundColor(colors.gray)
+  term.setTextColor(cBartC)
+  term.setBackgroundColor(cBarC)
   print("Customize")
   term.setTextColor(colors.gray)
   term.setBackgroundColor(colors.white)
@@ -74,8 +89,8 @@ function leftNavMenu3()
   term.setBackgroundColor(colors.white)
   print(" Storage ")
   print("Customize")
-  term.setTextColor(colors.white)
-  term.setBackgroundColor(colors.gray)
+  term.setTextColor(cBartC)
+  term.setBackgroundColor(cBarC)
   print("  M-OS   ")
   term.setTextColor(colors.gray)
   term.setBackgroundColor(colors.white)
@@ -90,8 +105,8 @@ function leftNavMenu4()
   print(" Storage ")
   print("Customize")
   print("  M-OS   ")
-  term.setTextColor(colors.white)
-  term.setBackgroundColor(colors.gray)
+  term.setTextColor(cBartC)
+  term.setBackgroundColor(cBarC)
   print(" Startup ")
   paintutils.drawLine(10,2,10,h-1,colors.lightGray)
 end
@@ -116,10 +131,14 @@ function selection2()
     term.setBackgroundColor(colors.white)
     term.setCursorPos(12,2)
     print("Customize your Computer")
-    term.setCursorPos(12,4)
-    term.setTextColor(colors.lightGray)
-    term.setBackgroundColor(colors.gray)
+	term.setBackgroundColor(colors.gray)
+	term.setTextColor(colors.lightGray)
+	term.setCursorPos(12,4)
+	print(" Change Themes ")
+    term.setCursorPos(12,6)
     print(" Change Background ")
+    term.setCursorPos(12,8)
+    print(" Change User Icon ")
 end
 
 function selection3()
@@ -132,15 +151,16 @@ function selection3()
     term.setCursorPos(12,3)
     print("Created by MarcoPolo0306")
     term.setCursorPos(12,5)
-    print("Version realease date: 5/10/17")
+    print("Version realease date: nil")
     term.setCursorPos(12,6)
     print("Version: "..verFull)
-    term.setCursorPos(25,6)
-    term.setCursorPos(12,8)
+    term.setCursorPos(12,7)
+    print("UI type: Sugercane")
+    term.setCursorPos(12,9)
     term.setBackgroundColor(colors.gray)
     term.setTextColor(colors.lightGray)
     print(" Reinstall ")
-    term.setCursorPos(12,10)
+    term.setCursorPos(12,11)
     term.setBackgroundColor(colors.gray)
     term.setTextColor(colors.lightGray)
     print(" Uninstall ")
@@ -186,18 +206,17 @@ function selection4()
 end
 
 function drawWindow()
-  local tbarC = colors.lightBlue
-  local tBartC = colors.white
   term.setBackgroundColor(colors.white)
   term.clear()
   term.setCursorPos(1,1)
-  term.setBackgroundColor(tbarC)
+  term.setBackgroundColor(tBarC)
   term.setTextColor(tBartC)
   term.clearLine()
   term.setCursorPos(2,1)
   write("Settings")
   term.setCursorPos(w,1)
   term.setBackgroundColor(colors.red)
+  term.setTextColor(colors.white)
   print("X")
   term.setBackgroundColor(colors.white)
   term.setTextColor(colors.gray)
@@ -328,6 +347,62 @@ function bgChange()
 	print(" Done ")
 end
 
+function themes()
+	slc = 6
+	lastSelection = 6
+	menuClick = false
+	term.clear()
+	drawWindow()
+	titleBar()
+	local themeF = io.open("m-os/config/theme",r)
+	local theme = themeF:read()
+	--mc
+	local mc = paintutils.loadImage("m-os/images/mc-preview")
+	paintutils.drawImage(mc,2,3)
+	term.setBackgroundColor(colors.white)
+	term.setCursorPos(2,8)
+	term.setTextColor(colors.gray)
+	print("Minecraft")
+	term.setCursorPos(2,10)
+	term.setBackgroundColor(colors.green)
+	term.setTextColor(colors.brown)
+	print("  Title  ")
+	term.setCursorPos(2,12)
+	term.setBackgroundColor(colors.lime)
+	term.setTextColor(colors.black)
+	print("  Button ")
+	--default
+	local default = paintutils.loadImage("m-os/images/default-preview")
+	paintutils.drawImage(default,13,3)
+	term.setBackgroundColor(colors.white)
+	term.setCursorPos(12,8)
+	term.setTextColor(colors.gray)
+	print("  Default")
+	term.setCursorPos(13,10)
+	term.setBackgroundColor(colors.lightBlue)
+	term.setTextColor(colors.white)
+	print("  Title  ")
+	term.setCursorPos(13,12)
+	term.setBackgroundColor(colors.gray)
+	term.setTextColor(colors.lightGray)
+	print("  Button ")	
+	--current checker
+	if theme == "minecraft" then
+		term.setCursorPos(2,14)
+		term.setBackgroundColor(colors.white)
+		term.setTextColor(colors.gray)
+		print(" Current")
+	elseif theme == "default" then
+		term.setCursorPos(13,14)
+		term.setBackgroundColor(colors.white)
+		term.setTextColor(colors.gray)
+		print(" Current")
+	end
+	term.setCursorPos(w-7,h-2)
+	term.setBackgroundColor(colors.gray)
+	term.setTextColor(colors.lightGray)
+	print(" Done ")
+end
 
 function createWindow()
   term.setBackgroundColor(1)
@@ -358,6 +433,8 @@ while true do
     selection4()
   elseif lastSelection == 5 then
 	bgChange()
+  elseif lastSelection == 6 then
+	themes()
   end
   local event, button, X, Y = os.pullEvent()
   if event == "mouse_click" then
@@ -379,9 +456,13 @@ while true do
 		createWindow()
 		leftNavMenu4()
 		selection4()
-    elseif X>=12 and X<=37 and Y==4 and slc == 2 and button == 1 then
+	elseif X>=12 and X<=37 and Y==4 and slc == 2 and button == 1 then
+	  themes()
+    elseif X>=12 and X<=37 and Y==6 and slc == 2 and button == 1 then
       bgChange()
-    elseif X>=12 and X<=23 and Y==8 and slc == 3 and button == 1 then
+    elseif X>=12 and X<=36 and Y==8 and slc == 2 and button == 1 then
+      shell.run("paint","m-os/images/UserPiciture")
+    elseif X>=12 and X<=23 and Y==6 and slc == 3 and button == 1 then
       term.setBackgroundColor(colors.black)
       term.clear()
       term.setCursorPos(1,1)
@@ -448,6 +529,18 @@ while true do
 		bgChange()
 	elseif X>=w-7 and X<=w-2 and Y==h-2 and slc == 5 then
 		os.reboot()
+	elseif X>=w-7 and X<=w-2 and Y==h-2 and slc == 6 then
+		os.reboot()
+	elseif X>=2 and X<=9 and Y>=3 and Y<=7 and slc == 6 then
+		local themeWF = fs.open("m-os/config/theme","w")
+		themeWF.write("minecraft")
+		local imagePath2 = fs.open("m-os/config/bgPath", "w")
+		imagePath2.write("m-os/images/backgrounds/mc")
+	elseif X>=11 and X<=20 and Y>=3 and Y<=7 and slc == 6 then
+		local themeWF = fs.open("m-os/config/theme","w")
+		themeWF.write("default")
+		local imagePath2 = fs.open("m-os/config/bgPath", "w")
+		imagePath2.write("m-os/images/backgrounds/default")
     end
   end
 end

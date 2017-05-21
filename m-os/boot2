@@ -1,0 +1,46 @@
+local w,h = term.getSize()
+
+function printCentered(msg, height)
+  term.setCursorPos(w/2 - #msg/2, height)
+  term.write(msg)
+end
+
+function apaload(file)
+	term.setCursorPos(1,15)
+	term.clearLine()
+	if #file>=24 then
+		printCentered("Applying and loading file...", 15)
+	else
+		printCentered("Applying and loading file: "..file, 15)
+	end
+	sleep(math.random(0.5,0.9))
+end
+
+function applyandloadfiles()
+	apaload("startup")
+	apaload("m-os/desktop")
+	apaload("m-os/logon")
+	apaload("m-os/monitior_detected	")
+	apaload("m-os/restore")
+	apaload("m-os/boot")
+	apaload("m-os/settings")
+	apaload("m-os/programs/appstore")
+	apaload("m-os/programs/file_browser")
+	apaload("m-os/programs/installed_programs")
+	apaload("m-os/programs/mshell")
+	apaload("m-os/programs/news")
+	apaload("m-os/programs/programs")
+	apaload("m-os/images/logo")
+	apaload("m-os/images/backgrounds/cc")
+	apaload("m-os/images/backgrounds/default")
+	apaload("m-os/images/backgrounds/mc")
+	apaload("m-os/images/icons/file")
+	apaload("m-os/images/icons/nPaint")
+	apaload("m-os/images/icons/paint")
+	apaload("m-os/images/icons/shell")
+	apaload("m-os/images/icons/unknown")
+end
+
+if fs.exists(".update") then
+  applyandloadfiles()
+end

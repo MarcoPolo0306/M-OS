@@ -4,6 +4,23 @@ slc = 0
 
 local w,h = term.getSize()
 
+local themeF = io.open("m-os/config/theme",r)
+local theme = themeF:read()
+if theme == "default" then
+	tBarC = colors.lightBlue
+	tBartC = colors.white
+	mSideC = colors.white
+	cBarC = colors.gray
+	cBartC = colors.lightGray
+elseif theme == "minecraft" then
+	tBarC = colors.green
+	tBartC = colors.brown
+	mSideC = colors.lime
+	cBarC = colors.lime
+	cBartC = colors.black
+end
+
+
 npaintBpos=1000
 npaintEpos=1000
 ideBpos=1000
@@ -108,18 +125,17 @@ function installedPrograms()
 end
 
 function drawWindow()
-  local tbarC = colors.lightBlue
-  local tBartC = colors.white
   term.setBackgroundColor(colors.white)
   term.clear()
   term.setCursorPos(1,1)
-  term.setBackgroundColor(tbarC)
+  term.setBackgroundColor(tBarC)
   term.setTextColor(tBartC)
   term.clearLine()
   term.setCursorPos(2,1)
   write("Programs")
   term.setCursorPos(w,1)
   term.setBackgroundColor(colors.red)
+  term.setTextColor(colors.white)
   print("X")
   loadPrograms()
   term.setBackgroundColor(colors.white)

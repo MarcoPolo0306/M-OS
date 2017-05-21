@@ -5,6 +5,20 @@ luaide = false
 npaint = false
 lastSel = 1
 
+local themeF = io.open("m-os/config/theme",r)
+local theme = themeF:read()
+if theme == "default" then
+	tBarC = colors.lightBlue
+	tBartC = colors.white
+	cBarC = colors.lightGray
+	cBartC = colors.gray
+elseif theme == "minecraft" then
+	tBarC = colors.green
+	tBartC = colors.brown
+	cBarC = colors.lime
+	cBartC = colors.black
+end
+
 local w,h = term.getSize()
 
 function printCentered(msg, height)
@@ -23,23 +37,22 @@ function titleBar()
 end
 
 function drawWindow()
-  local tbarC = colors.lightBlue
-  local tBartC = colors.white
   term.setBackgroundColor(colors.white)
   term.clear()
   term.setCursorPos(1,1)
-  term.setBackgroundColor(tbarC)
+  term.setBackgroundColor(tBarC)
   term.setTextColor(tBartC)
   term.clearLine()
   term.setCursorPos(1,1)
-  term.setBackgroundColor(colors.gray)
-  term.setTextColor(colors.lightGray)
+  term.setBackgroundColor(cBarC)
+  term.setTextColor(cBartC)
   write(" <- ")
-  term.setBackgroundColor(colors.lightBlue)
-  term.setTextColor(colors.white)
+  term.setBackgroundColor(tBarC)
+  term.setTextColor(tBartC)
   write(" App Store")
   term.setCursorPos(w,1)
   term.setBackgroundColor(colors.red)
+  term.setTextColor(colors.white)
   print("X")
   term.setBackgroundColor(colors.white)
   term.setTextColor(colors.gray)

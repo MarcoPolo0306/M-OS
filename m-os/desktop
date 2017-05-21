@@ -2,11 +2,28 @@ local function main()
 
 local w,h = term.getSize()
 
-slc = 0
 tBarC = 8
 tBartC = colors.white
+
+local themeF = io.open("m-os/config/theme",r)
+local theme = themeF:read()
+if theme == "default" then
+	tBarC = colors.lightBlue
+	tBartC = colors.white
+	mSideC = colors.white
+	cBarC = colors.gray
+	cBartC = colors.lightGray
+elseif theme == "minecraft" then
+	tBarC = colors.green
+	tBartC = colors.brown
+	mSideC = colors.lime
+	cBarC = colors.lime
+	cBartC = colors.black
+end
+
+slc = 0
 backColor = 1
-isBuild = false
+isBuild = true
 term.setBackgroundColor(backColor)
 term.clear()
 
@@ -35,75 +52,123 @@ function titleBarMenuClick()
   term.setBackgroundColor(tBarC)
   term.setTextColor(tBartC)
   term.clearLine()
-  term.setBackgroundColor(colors.gray)
-  term.setTextColor(colors.lightGray)
+  term.setBackgroundColor(cBarC)
+  term.setTextColor(cBartC)
   term.setCursorPos(1, h)
   
   write(" Menu ")
 end
 
 function drawDesktop()
+  slc = 0
   term.setBackgroundColor(backColor)
   term.clear()
   imagePath = io.open("m-os/config/bgPath", "r")
   local imagePath2 = imagePath:read()
   bground = paintutils.loadImage(imagePath2)
-  paintutils.drawImage(bground,w/2-48/2,h/2-17/2)
+  if imagePath == "m-os/images/backgrounds/xp" then
+	x = 62
+  else
+	x=53
+  end
+  paintutils.drawImage(bground,x/2-w/2,h/2-h/2)
   titleBar()
   if isBuild == true then
     term.setBackgroundColor(colors.white)
     term.setTextColor(colors.lightGray)
-    term.setCursorPos(w-27,h-2)
-    print("M-OS 1.1.4 Deveolper Preview")
-    term.setCursorPos(w-27,h-1)
-    print("build-7, build date: 4/30/17") 
+    term.setCursorPos(w-string.len("M-OS 2.0 Deveolper Preview")+1,h-2)
+    print("M-OS 2.0 Deveolper Preview")
+    term.setCursorPos(w-string.len("build-"..fs.getSize("m-os/desktop")..", build date: 5/17/17")+1,h-1)
+    print("build-"..fs.getSize("m-os/desktop")..", build date: 5/17/17") 
   end
 end
- 
+
 function drawMenu1()
   term.setTextColor(tBartC)
   term.setBackgroundColor(tBarC)
-  term.setCursorPos(1,h - 10)
-  print("           ")
-  term.setCursorPos(1,h - 9)
-  print("   News    ")
-  term.setCursorPos(1,h - 8)
-  print(" Settings  ")
-  term.setCursorPos(1,h - 7)
-  print(" Programs  ")
-  term.setCursorPos(1,h - 6)
-  print("           ")
-  term.setCursorPos(1,h - 5)
-  print("  Logoff   ")
-  term.setCursorPos(1,h - 4)
-  print("           ")
-  term.setCursorPos(1, h - 3)
-  print(" Shutdown  ")
-  term.setCursorPos(1, h - 2)
-  print("  Restart  ")
-  term.setCursorPos(1, h - 1)
-  print("           ")
+  paintutils.drawFilledBox(1,h-10,20,h-1,tBarC)
+  paintutils.drawLine(9,h-10,9,h+1,mSideC)
+  paintutils.drawBox(-1,h-11,20,h,mSideC)
+  term.setBackgroundColor(tBarC)
+  term.setCursorPos(1,h-1)
+  print(" Search")
+  term.setCursorPos(11,h-1)
+  print("Shutdown ")
+  term.setCursorPos(11,h-9)
+  print("Settings ")
+  term.setCursorPos(11,h-8)
+  print("Programs ")
+  nextY = 10
+  ide = false
+  npp = false
+  ideY=0
+  nppY=0
+  if fs.exists("m-os/programs/installedPrograms/LuaIDE") then
+	nextY = nextY-1
+    ideY = nextY
+	ide = true
+	term.setCursorPos(1,h-nextY)
+	print(" LuaIDE")
+  end
+  if fs.exists("m-os/programs/installedPrograms/nPaintPro") then
+	nextY=nextY-1
+    nppY = nextY
+	npp = true
+	term.setCursorPos(1,h-nextY)
+	print(" nPaint")
+  end
+end
+
+function dialog(text,options,selection)
+	slc = 2
+	drawDesktop()
+	term.setTextColor(colors.white)
+	paintutils.drawFilledBox(w/2-string.len(text)/2-1,h/2-3,w/2+string.len(text)/2,h/2+3,colors.lightBlue)
+	term.setCursorPos(w/2-string.len(text)/2,h/2-2)
+	print(text)
+	if options == "shutdown" then
+		if selection == 1 then
+			term.setBackgroundColor(colors.lightGray)
+			term.setCursorPos(w/2-8/2,h/2)
+			print(" Logoff ")
+		else
+			term.setBackgroundColor(colors.lightBlue)
+			term.setCursorPos(w/2-8/2,h/2)
+			print(" Logoff ")
+		end
+		if selection == 2 then
+			term.setBackgroundColor(colors.lightGray)
+			term.setCursorPos(w/2-9/2,h/2+1)
+			print(" Restart ")
+		else
+			term.setBackgroundColor(colors.lightBlue)
+			term.setCursorPos(w/2-9/2,h/2+1)
+			print(" Restart ")
+		end
+		if selection == 3 then
+			term.setBackgroundColor(colors.lightGray)
+			term.setCursorPos(w/2-10/2,h/2+2)
+			print(" Shutdown ")
+		else
+			term.setBackgroundColor(colors.lightBlue)
+			term.setCursorPos(w/2-10/2,h/2+2)
+			print(" Shutdown ")
+		end
+	end
 end
 
 drawDesktop()
 
 while true do
-  if not fs.exists("m-os/desktop") then
-    slc = 2147483647
-	sleep(5)  
-	term.setBackgroundColor(colors.red)
-	term.clear()
-	term.setBackgroundColor(colors.gray)
-	term.setCursorPos(1,1)
-	term.clearLine()
-	term.setTextColor(colors.white)
-	print("Could not find file.")
-	term.setBackgroundColor(colors.red)
-	print("M-OS could not find the file: M-OS")
-	print("Please run a reinstall when your computer reboots.")
-	sleep(15)
-	os.reboot()
+  if slc == 1 then
+	drawDesktop()
+    slc = 1
+	drawMenu1()
+	titleBarMenuClick()
+  else
+    drawDesktop()
   end
+
   local event, button, X, Y = os.pullEvent()
   if event == "mouse_click" then
     if X >=2 and X <=6 and Y==h and button ==1 and slc == 0 then
@@ -112,23 +177,41 @@ while true do
      slc = 1
      sleep(0.2)
      canClick = true
-   elseif X>=1 and X<=6 and Y==h and button == 1 and slc == 1 and canClick == true then
-     drawDesktop()
-     slc = 0
-   elseif X>=1 and X<=11 and Y==h - 9 and slc == 1 and button == 1 then
-     shell.run("m-os/programs/news")
-   elseif X>=1 and X<=11 and Y==h - 7 and slc == 1 and button == 1 then
-     shell.run("m-os/programs/programs")
-   elseif X>=1 and X<=11 and Y==h-8 and slc == 1 and button == 1 then
-     shell.run("m-os/settings")
-   elseif X>=1 and X<=11 and Y==h-5 and slc == 1 and button == 1 then
-     shell.run("m-os/logon")
-   elseif X>=1 and X<=11 and Y==h - 2 and slc == 1 and button == 1 then
-     os.reboot()
-   elseif X>=1 and X<=11 and Y==h - 3 and slc == 1 and button == 1 then
-     os.shutdown()
+   elseif X>=10 and X<=18 and Y==h-1 and button == 1 and slc == 1 then
+	 term.setCursorPos(10,h-1)
+	 term.setBackgroundColor(cBarC)
+	 term.setTextColor(cBartC)
+	 print(" Shutdown ")
+	 sleep(0.1)
+	 shell.run("m-os/shutdown")
+   elseif X>=10 and X<=18 and Y==h-9 and button == 1 and slc == 1 then
+	 term.setCursorPos(10,h-9)
+	 term.setBackgroundColor(cBarC)
+	 term.setTextColor(cBartC)
+     print(" Settings ")
+	 sleep(0.1)
+	 shell.run("m-os/settings")
+   elseif X>=10 and X<=18 and Y==h-8 and button == 1 and slc == 1 then
+     term.setCursorPos(10,h-8)
+	 term.setBackgroundColor(cBarC)
+	 term.setTextColor(cBartC)
+	 print(" Programs ")
+	 sleep(0.1)
+	 shell.run("m-os/programs/programs")
+   elseif X>=1 and X<=7 and Y==h-1 and button == 1 and slc == 1 then
+	 term.setBackgroundColor(cBarC)
+	 term.setTextColor(cBartC)
+	 term.setCursorPos(1,h-1)
+	 print(" Search ")
+	 sleep(0.1)
+	 shell.run("m-os/search")
+   elseif X>=1 and X<=8 and Y==ideY and button ==1 and slc == 1 then
+     shell.run("m-os/programs/installedPrograms/LuaIDE")
+   elseif X>=1 and X<=8 and Y==nppY and button ==1 and slc == 1 then
+     shell.run("m-os/programs/installedPrograms/nPaintPro")
    else
-	drawDesktop()
+	 canClick = false
+	 drawDesktop()
    end
   end
 end
@@ -144,6 +227,9 @@ if not ok then
 	term.setTextColor(colors.white)
 	print("Internal System Error")
 	term.setBackgroundColor(colors.red)
+	if err == "Terminated" then
+		err = "A critical system process was unexpectly stopped."
+	end
 	print("The following error has occured: " .. err)
 	print("Please report this error to MarcoPolo0306. (=")
 	print("")
@@ -156,7 +242,6 @@ if not ok then
 		end
 	end
 end
-
 
 
 

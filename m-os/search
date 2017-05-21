@@ -1,0 +1,86 @@
+local function main()
+
+slc = 0
+
+local w,h = term.getSize()
+
+function titleBar()
+  term.setCursorPos(1,h)
+  term.setBackgroundColor(tBarC)
+  term.setTextColor(tBartC)
+  term.clearLine()
+  term.setTextColor(tBartC)
+  term.setCursorPos(1, h)
+  write(" Menu ")
+end
+
+function drawWindow()
+  local tbarC = colors.lightBlue
+  local tBartC = colors.white
+  term.setBackgroundColor(colors.white)
+  term.clear()
+  term.setCursorPos(1,1)
+  term.setBackgroundColor(tbarC)
+  term.setTextColor(tBartC)
+  term.clearLine()
+  term.setCursorPos(2,1)
+  write("Search")
+  term.setCursorPos(w,1)
+  term.setBackgroundColor(colors.red)
+  print("X")
+  term.setBackgroundColor(colors.white)
+  term.setTextColor(colors.gray)
+end
+
+drawWindow()
+titleBar()
+
+term.setBackgroundColor(colors.white)
+
+  term.setTextColor(colors.gray)
+  term.setCursorPos(1,3)
+  term.setCursorBlink(true)
+  write(" Please enter a search query: ")
+  input = read()
+  if fs.exists(input) then
+    print(" Found a File/Folder")
+    if fs.isDir(input) then
+      print(" [DIR] "..input)
+    else
+      print(input)
+    end
+	sleep(1.5)
+	
+	print(" Press any key to go back to the desktop.")
+	local event = os.pullEvent()
+	shell.run("m-os/desktop") 
+  else
+    print(" No File/folder found!")
+	sleep(1)
+	shell.run("m-os/desktop")
+  end
+end
+local ok, err = pcall(main)
+print(err)
+
+if not ok then
+	term.setBackgroundColor(colors.red)
+	term.clear()
+	term.setBackgroundColor(colors.gray)
+	term.setCursorPos(1,1)
+	term.clearLine()
+	term.setTextColor(colors.white)
+	print("Internal System Error")
+	term.setBackgroundColor(colors.red)
+	print("The following error has occured: " .. err)
+	print("Please report this error to MarcoPolo0306. (=")
+	print("")
+	write("Press any key...")
+	term.setCursorBlink(true)
+	while true do
+		local event, key, isHeld = os.pullEvent("key")
+		if key then
+			os.reboot()
+		end
+	end
+end

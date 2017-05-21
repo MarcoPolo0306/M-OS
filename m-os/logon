@@ -1,7 +1,7 @@
 function main()
 local configfile1 = io.open("m-os/config/pass", "r")
 local password = configfile1:read()
-local verFull = "M-OS 2.0 build "..fs.getSize("m-os/desktop")
+local verFull = "M-OS 2.0"
 
 local w,h = term.getSize()
 

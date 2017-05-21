@@ -23,7 +23,7 @@ end
 
 slc = 0
 backColor = 1
-isBuild = true
+isBuild = false
 term.setBackgroundColor(backColor)
 term.clear()
 
